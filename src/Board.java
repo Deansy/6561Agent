@@ -36,11 +36,34 @@ public class Board {
 
 
         for (int y = 0; y < 4; y++) {
-
             for (int x = 0; x < 4; x++) {
                 if (boardCopy[x][y].equals("0")) {
 
                     for (int k=x+1; k<4; k++) {
+                        if (boardCopy[k][y].equals("0") == false) {
+                            boardCopy[x][y] = boardCopy[k][y];
+                            boardCopy[k][y] = "0";
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        board = boardCopy;
+
+    }
+    public void slideRight() {
+
+        // Copy the board, Perform any operations and replace the board afterwards
+        String[][] boardCopy = board.clone();
+
+
+        for (int y = 0; y < 4; y++) {
+            for (int x = 3; x > 0; x--) {
+                if (boardCopy[x][y].equals("0")) {
+
+                    for (int k=x-1; k>=0; k--) {
                         if (boardCopy[k][y].equals("0") == false) {
                             boardCopy[x][y] = boardCopy[k][y];
                             boardCopy[k][y] = "0";
