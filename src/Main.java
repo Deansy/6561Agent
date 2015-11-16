@@ -20,7 +20,8 @@ public class Main {
         b.printBoard();
 
 
-        b.slideRight();
+        //b.slideUp();
+        b.slideDown();
 
 
         b.printBoard();

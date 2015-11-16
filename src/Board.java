@@ -78,6 +78,57 @@ public class Board {
 
     }
 
+    public void slideUp() {
+
+        // Copy the board, Perform any operations and replace the board afterwards
+        String[][] boardCopy = board.clone();
+
+
+        for (int x = 0; x < 4; x++) {
+            for (int y = 0; y < 4; y++) {
+                if (boardCopy[x][y].equals("0")) {
+
+                    for (int k=y+1; k<4; k++) {
+                        if (boardCopy[x][k].equals("0") == false) {
+                            boardCopy[x][y] = boardCopy[x][k];
+                            boardCopy[x][k] = "0";
+                            break;
+                        }
+                    }
+                }
+            }
+
+        }
+
+        board = boardCopy;
+
+    }
+
+    public void slideDown() {
+
+        // Copy the board, Perform any operations and replace the board afterwards
+        String[][] boardCopy = board.clone();
+
+
+        for (int x = 0; x < 4; x++) {
+            for (int y = 3; y >=0; y--) {
+                if (boardCopy[x][y].equals("0")) {
+
+                    for (int k=y-1; k>=0; k--) {
+                        if (boardCopy[x][k].equals("0") == false) {
+                            boardCopy[x][y] = boardCopy[x][k];
+                            boardCopy[x][k] = "0";
+                            break;
+                        }
+                    }
+                }
+            }
+
+        }
+
+        board = boardCopy;
+
+    }
 
 
     public void placeTile(TileColor tileColor, int xPos, int yPos, String value) {
