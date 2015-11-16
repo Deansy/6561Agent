@@ -51,7 +51,24 @@ public class Board {
         }
 
         board = boardCopy;
+        mergeLeft();
 
+    }
+
+    public void mergeLeft() {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 3; j++) {
+                if ((board[j][i].equals("0") == false) && board[j][i].equals(board[j+1][i]) ) {
+                    // 2048 based merging
+                    // TODO: change to 6561 merging
+                    // TODO: handle merging and deletion based on colour
+                    int value1 = Integer.valueOf(board[j][i]);
+                    int value2 = Integer.valueOf(board[j+1][i]);
+                    board[j][i] = Integer.toString(value1 + value2);
+                    board[j+1][i]="0";
+                }
+            }
+        }
     }
     public void slideRight() {
 
