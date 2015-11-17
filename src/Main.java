@@ -6,30 +6,30 @@ public class Main {
 
         Board b = new Board();
 
-        b.placeTile(Board.TileColor.BLUE, 0, 0, "1");
-        b.placeTile(Board.TileColor.BLUE, 1, 0, "1");
-        b.placeTile(Board.TileColor.BLUE, 2, 0, "1");
-        b.placeTile(Board.TileColor.BLUE, 3, 0, "1");
+        b.placeTile(Board.TileColor.BLUE, 0, 0, 1);
+        b.placeTile(Board.TileColor.BLUE, 1, 0, 1);
+        b.placeTile(Board.TileColor.BLUE, 2, 0, 1);
+        b.placeTile(Board.TileColor.BLUE, 3, 0, 1);
 
 
-        b.placeTile(Board.TileColor.BLUE, 1, 1, "3");
-        b.placeTile(Board.TileColor.BLUE, 2, 1, "3");
+        b.placeTile(Board.TileColor.BLUE, 1, 1, 3);
+        b.placeTile(Board.TileColor.BLUE, 2, 1, 3);
 
-        b.placeTile(Board.TileColor.BLUE, 2, 2, "3");
+        b.placeTile(Board.TileColor.BLUE, 2, 2, 3);
 
-        b.placeTile(Board.TileColor.BLUE, 3, 3, "1");
+        b.placeTile(Board.TileColor.BLUE, 3, 3, 1);
 
 
         b.printBoard();
 
         //b.slideRight();
         //b.slideRight();
-        b.slideUp();
-        b.slideUp();
+        //b.slideUp();
+        //b.slideUp();
+       // b.slideLeft();
         //b.slideLeft();
-        //b.slideLeft();
-        //b.slideDown();
-        //b.slideDown();
+        b.slideDown();
+        b.slideDown();
         b.printBoard();
     }
 }
