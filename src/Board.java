@@ -70,6 +70,58 @@ public class Board {
             }
         }
     }
+
+    public void mergeRight() {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 3; j > 0; j--) {
+                if ((board[j][i].equals("0") == false) && board[j][i].equals(board[j-1][i]) ) {
+                    // 2048 based merging
+                    // TODO: change to 6561 merging
+                    // TODO: handle merging and deletion based on colour
+                    int value1 = Integer.valueOf(board[j][i]);
+                    int value2 = Integer.valueOf(board[j-1][i]);
+                    board[j][i] = Integer.toString(value1 + value2);
+                    board[j-1][i]="0";
+                }
+            }
+        }
+    }
+
+    //TODO: Might not be up
+    public void mergeUp() {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 3; j > 0; j--) {
+                if ((board[i][j].equals("0") == false) && board[i][j].equals(board[i][j-1]) ) {
+                    // 2048 based merging
+                    // TODO: change to 6561 merging
+                    // TODO: handle merging and deletion based on colour
+                    int value1 = Integer.valueOf(board[i][j]);
+                    int value2 = Integer.valueOf(board[i][j-1]);
+                    board[i][j] = Integer.toString(value1 + value2);
+                    board[i][j-1]="0";
+                }
+            }
+        }
+    }
+
+    public void mergeDown() {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 3; j++) {
+                if ((board[i][j].equals("0") == false) && board[i][j].equals(board[i][j+1]) ) {
+                    // 2048 based merging
+                    // TODO: change to 6561 merging
+                    // TODO: handle merging and deletion based on colour
+                    int value1 = Integer.valueOf(board[i][j]);
+                    int value2 = Integer.valueOf(board[i][j+1]);
+                    board[i][j] = Integer.toString(value1 + value2);
+                    board[i][j+1]="0";
+                }
+            }
+        }
+    }
+
+
+
     public void slideRight() {
 
         // Copy the board, Perform any operations and replace the board afterwards
@@ -92,6 +144,7 @@ public class Board {
         }
 
         board = boardCopy;
+        mergeRight();
 
     }
 
@@ -118,6 +171,7 @@ public class Board {
         }
 
         board = boardCopy;
+        mergeUp();
 
     }
 
@@ -144,6 +198,7 @@ public class Board {
         }
 
         board = boardCopy;
+        mergeDown();
 
     }
 

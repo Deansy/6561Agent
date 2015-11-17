@@ -15,7 +15,7 @@ public class Main {
         b.placeTile(Board.TileColor.BLUE, 1, 1, "2");
         b.placeTile(Board.TileColor.BLUE, 2, 1, "2");
 
-        b.placeTile(Board.TileColor.BLUE, 2, 2, "1");
+        b.placeTile(Board.TileColor.BLUE, 2, 2, "2");
 
         b.placeTile(Board.TileColor.BLUE, 3, 3, "1");
 
@@ -23,8 +23,10 @@ public class Main {
         b.printBoard();
 
 
-        b.slideLeft();
-        b.slideLeft();
+        //b.slideLeft();
+        //b.slideLeft();
+        b.slideDown();
+        b.slideDown();
         b.printBoard();
     }
 }
