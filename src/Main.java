@@ -12,21 +12,24 @@ public class Main {
         b.placeTile(Board.TileColor.BLUE, 3, 0, "1");
 
 
-        b.placeTile(Board.TileColor.BLUE, 1, 1, "2");
-        b.placeTile(Board.TileColor.BLUE, 2, 1, "2");
+        b.placeTile(Board.TileColor.BLUE, 1, 1, "3");
+        b.placeTile(Board.TileColor.BLUE, 2, 1, "3");
 
-        b.placeTile(Board.TileColor.BLUE, 2, 2, "2");
+        b.placeTile(Board.TileColor.BLUE, 2, 2, "3");
 
         b.placeTile(Board.TileColor.BLUE, 3, 3, "1");
 
 
         b.printBoard();
 
-
+        //b.slideRight();
+        //b.slideRight();
+        b.slideUp();
+        b.slideUp();
         //b.slideLeft();
         //b.slideLeft();
-        b.slideDown();
-        b.slideDown();
+        //b.slideDown();
+        //b.slideDown();
         b.printBoard();
     }
 }
