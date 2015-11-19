@@ -3,6 +3,12 @@ public class Board {
     int boardWidth = 4;
     int boardHeight = 4;
 
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_WHITE = "\u001B[37m";
+    public static final String ANSI_BLACK = "\u001B[30m";
+
     public enum TileColor {
         BLUE, RED, GREY, EMPTY
     }
@@ -17,11 +23,12 @@ public class Board {
 
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                //board[i][j] = "0";
-                board[i][j] = new Tile(TileColor.BLUE, i, j, 0);
+                board[i][j] = new Tile(TileColor.EMPTY, i, j, 0);
             }
 
         }
+
+
     }
 
     // An idea to multi thread the shifting?
@@ -62,15 +69,11 @@ public class Board {
             for (int j = 0; j < 3; j++) {
                 if ((board[j][i].value != 0) && board[j][i].value == (board[j+1][i]).value ) {
                     // TODO: handle merging and deletion based on colour
-                    int value1 = Integer.valueOf(board[j][i].value);
-                    int value2 = Integer.valueOf(board[j+1][i].value);
-                    if (value1 == 1 && value2 == 1) {
-                        //TODO: Remove this
-                        board[j][i] = new Tile(TileColor.BLUE, j, i, value1 + value2);
-                    }
-                    else {
-                        board[j][i] = new Tile(TileColor.BLUE, j, i, value1 * 3);
-                    }
+                    int value1 = board[j][i].value;
+                    int value2 = board[j+1][i].value;
+
+                    board[j][i] = new Tile(TileColor.BLUE, j, i, value1 * 3);
+
                     board[j+1][i]= new Tile(TileColor.EMPTY, j+1, i, 0);
                 }
             }
@@ -84,13 +87,9 @@ public class Board {
                     // TODO: handle merging and deletion based on colour
                     int value1 = board[j][i].value;
                     int value2 = board[j-1][i].value;
-                    //TODO: Remove this
-                    if (value1 == 1 && value2 == 1) {
-                        board[j][i] = new Tile(TileColor.BLUE, j, i, value1 + value2);
-                    }
-                    else {
-                        board[j][i] = new Tile(TileColor.BLUE, j, i, value1 * 3);
-                    }
+
+                    board[j][i] = new Tile(TileColor.BLUE, j, i, value1 * 3);
+
                     board[j-1][i] = new Tile(TileColor.EMPTY, j-1, i, 0);
                 }
             }
@@ -104,14 +103,9 @@ public class Board {
                     // TODO: handle merging and deletion based on colour
                     int value1 = board[i][j].value;
                     int value2 = board[i][j-1].value;
-                    if (value1 == 1 && value2 == 1) {
-                        //TODO: Remove this
-                        board[i][j] = new Tile(TileColor.BLUE, j, i, value1 + value2);
 
-                    }
-                    else {
-                        board[i][j] = new Tile(TileColor.BLUE, j, i, value1 * 3);
-                    }
+                    board[i][j] = new Tile(TileColor.BLUE, j, i, value1 * 3);
+
                     board[i][j-1] = new Tile(TileColor.EMPTY, i, j - 1, 0);
                 }
             }
@@ -125,13 +119,9 @@ public class Board {
                     // TODO: handle merging and deletion based on colour
                     int value1 = board[i][j].value;
                     int value2 = board[i][j+1].value;
-                    if (value1 == 1 && value2 == 1) {
-                        //TODO: Remove this
-                        board[i][j] = new Tile(TileColor.BLUE, j, i, value1 + value2);
-                    }
-                    else {
-                        board[i][j] = new Tile(TileColor.BLUE, j, i, value1 * 3);
-                    }
+
+                    board[i][j] = new Tile(TileColor.BLUE, j, i, value1 * 3);
+
                     board[i][j+1] = new Tile(TileColor.EMPTY, i, j + 1, 0);
 
 
@@ -141,7 +131,7 @@ public class Board {
     }
 
 
-//
+
     public void slideRight() {
 
         // Code must be run twice to ensure all tiles are shifted and merged
@@ -171,7 +161,7 @@ public class Board {
         }
 
     }
-//
+
     public void slideUp() {
 
         // Code must be run twice to ensure proper shifting and merging
@@ -201,7 +191,7 @@ public class Board {
         }
 
     }
-//
+
     public void slideDown() {
 
         for (int i = 0; i < 2; i++) {
@@ -251,17 +241,18 @@ public class Board {
         for (int y = 0; y < 4; y++) {
             for (int x = 0; x < 4; x++) {
                 if (board[x][y].tileColor == TileColor.BLUE) {
-                    System.out.print("B" + board[x][y].value + " ");
+                    //System.out.println(ANSI_RED + "This text is red!" + ANSI_RESET);
+                    System.out.print(ANSI_BLUE + board[x][y].value + " " + ANSI_RESET);
 
                 }
                 else if (board[x][y].tileColor == TileColor.GREY) {
-                    System.out.print("G" + board[x][y].value + " ");
+                    System.out.print(ANSI_BLACK + board[x][y].value + " " + ANSI_RESET);
                 }
                 else if(board[x][y].tileColor == TileColor.RED) {
-                    System.out.print("R" + board[x][y].value + " ");
+                    System.out.print(ANSI_RED + board[x][y].value + " " + ANSI_RESET);
                 }
                 else {
-                    System.out.print(" 0 ");
+                    System.out.print("0 ");
                 }
             }
             System.out.println(" ");
