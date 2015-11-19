@@ -4,7 +4,7 @@ public class Board {
     int boardHeight = 4;
 
     public enum TileColor {
-        BLUE, RED, GREY
+        BLUE, RED, GREY, EMPTY
     }
 
     public Board() {
@@ -44,7 +44,7 @@ public class Board {
                         if (boardCopy[k][y].value != 0) {
                             Tile a = boardCopy[k][y];
                             boardCopy[x][y] = a;
-                            boardCopy[k][y] = new Tile(TileColor.BLUE, x, y, 0);
+                            boardCopy[k][y] = new Tile(TileColor.EMPTY, x, y, 0);
                             break;
                         }
                     }
@@ -57,7 +57,7 @@ public class Board {
 
     }
 
-    public void mergeLeft() {
+    private void mergeLeft() {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 3; j++) {
                 if ((board[j][i].value != 0) && board[j][i].value == (board[j+1][i]).value ) {
@@ -65,37 +65,39 @@ public class Board {
                     int value1 = Integer.valueOf(board[j][i].value);
                     int value2 = Integer.valueOf(board[j+1][i].value);
                     if (value1 == 1 && value2 == 1) {
+                        //TODO: Remove this
                         board[j][i] = new Tile(TileColor.BLUE, j, i, value1 + value2);
                     }
                     else {
                         board[j][i] = new Tile(TileColor.BLUE, j, i, value1 * 3);
                     }
-                    board[j+1][i]= new Tile(TileColor.BLUE, j+1, i, 0);
+                    board[j+1][i]= new Tile(TileColor.EMPTY, j+1, i, 0);
                 }
             }
         }
     }
 
-    public void mergeRight() {
+    private void mergeRight() {
         for (int i = 0; i < 4; i++) {
             for (int j = 3; j > 0; j--) {
                 if ((board[j][i].value != 0) && board[j][i].value == (board[j-1][i]).value ) {
                     // TODO: handle merging and deletion based on colour
                     int value1 = board[j][i].value;
                     int value2 = board[j-1][i].value;
+                    //TODO: Remove this
                     if (value1 == 1 && value2 == 1) {
                         board[j][i] = new Tile(TileColor.BLUE, j, i, value1 + value2);
                     }
                     else {
                         board[j][i] = new Tile(TileColor.BLUE, j, i, value1 * 3);
                     }
-                    board[j-1][i] = new Tile(TileColor.BLUE, j-1, i, 0);
+                    board[j-1][i] = new Tile(TileColor.EMPTY, j-1, i, 0);
                 }
             }
         }
     }
 
-    public void mergeUp() {
+    private void mergeUp() {
         for (int i = 0; i < 4; i++) {
             for (int j = 3; j > 0; j--) {
                 if ((board[i][j].value != 0) && board[i][j].value == (board[i][j-1]).value ) {
@@ -103,19 +105,20 @@ public class Board {
                     int value1 = board[i][j].value;
                     int value2 = board[i][j-1].value;
                     if (value1 == 1 && value2 == 1) {
+                        //TODO: Remove this
                         board[i][j] = new Tile(TileColor.BLUE, j, i, value1 + value2);
 
                     }
                     else {
                         board[i][j] = new Tile(TileColor.BLUE, j, i, value1 * 3);
                     }
-                    board[i][j-1] = new Tile(TileColor.BLUE, i, j - 1, 0);
+                    board[i][j-1] = new Tile(TileColor.EMPTY, i, j - 1, 0);
                 }
             }
         }
     }
 //
-    public void mergeDown() {
+    private void mergeDown() {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 3; j++) {
                 if ((board[i][j].value != 0) && board[i][j].value == board[i][j+1].value ) {
@@ -123,12 +126,13 @@ public class Board {
                     int value1 = board[i][j].value;
                     int value2 = board[i][j+1].value;
                     if (value1 == 1 && value2 == 1) {
+                        //TODO: Remove this
                         board[i][j] = new Tile(TileColor.BLUE, j, i, value1 + value2);
                     }
                     else {
                         board[i][j] = new Tile(TileColor.BLUE, j, i, value1 * 3);
                     }
-                    board[i][j+1] = new Tile(TileColor.BLUE, i, j + 1, 0);
+                    board[i][j+1] = new Tile(TileColor.EMPTY, i, j + 1, 0);
 
 
                 }
@@ -140,81 +144,90 @@ public class Board {
 //
     public void slideRight() {
 
-        // Copy the board, Perform any operations and replace the board afterwards
-        Tile[][] boardCopy = board.clone();
+        // Code must be run twice to ensure all tiles are shifted and merged
+        for (int i = 0; i < 2; i++) {
+
+            // Copy the board, Perform any operations and replace the board afterwards
+            Tile[][] boardCopy = board.clone();
 
 
-        for (int y = 0; y < 4; y++) {
-            for (int x = 3; x > 0; x--) {
-                if (boardCopy[x][y].value == 0) {
+            for (int y = 0; y < 4; y++) {
+                for (int x = 3; x > 0; x--) {
+                    if (boardCopy[x][y].value == 0) {
 
-                    for (int k=x-1; k>=0; k--) {
-                        if (boardCopy[k][y].value != 0) {
-                            boardCopy[x][y] = boardCopy[k][y];
-                            boardCopy[k][y] = new Tile(TileColor.BLUE, x , y ,0);
-                            break;
+                        for (int k = x - 1; k >= 0; k--) {
+                            if (boardCopy[k][y].value != 0) {
+                                boardCopy[x][y] = boardCopy[k][y];
+                                boardCopy[k][y] = new Tile(TileColor.EMPTY, x, y, 0);
+                                break;
+                            }
                         }
                     }
                 }
             }
-        }
 
-        board = boardCopy;
-        mergeRight();
+            board = boardCopy;
+            mergeRight();
+        }
 
     }
 //
     public void slideUp() {
 
-        // Copy the board, Perform any operations and replace the board afterwards
-        Tile[][] boardCopy = board.clone();
+        // Code must be run twice to ensure proper shifting and merging
+        for (int i = 0; i < 2; i++) {
+            // Copy the board, Perform any operations and replace the board afterwards
+            Tile[][] boardCopy = board.clone();
 
 
-        for (int x = 0; x < 4; x++) {
-            for (int y = 0; y < 4; y++) {
-                if (boardCopy[x][y].value == 0) {
+            for (int x = 0; x < 4; x++) {
+                for (int y = 0; y < 4; y++) {
+                    if (boardCopy[x][y].value == 0) {
 
-                    for (int k=y+1; k<4; k++) {
-                        if (boardCopy[x][k].value != 0) {
-                            boardCopy[x][y] = boardCopy[x][k];
-                            boardCopy[x][k] = new Tile(TileColor.BLUE, x, y, 0);
-                            break;
+                        for (int k = y + 1; k < 4; k++) {
+                            if (boardCopy[x][k].value != 0) {
+                                boardCopy[x][y] = boardCopy[x][k];
+                                boardCopy[x][k] = new Tile(TileColor.EMPTY, x, y, 0);
+                                break;
+                            }
                         }
                     }
                 }
+
             }
 
+            board = boardCopy;
+            mergeUp();
         }
-
-        board = boardCopy;
-        mergeUp();
 
     }
 //
     public void slideDown() {
 
-        // Copy the board, Perform any operations and replace the board afterwards
-        Tile[][] boardCopy = board.clone();
+        for (int i = 0; i < 2; i++) {
+            // Copy the board, Perform any operations and replace the board afterwards
+            Tile[][] boardCopy = board.clone();
 
 
-        for (int x = 0; x < 4; x++) {
-            for (int y = 3; y >=0; y--) {
-                if (boardCopy[x][y].value == 0) {
+            for (int x = 0; x < 4; x++) {
+                for (int y = 3; y >= 0; y--) {
+                    if (boardCopy[x][y].value == 0) {
 
-                    for (int k=y-1; k>=0; k--) {
-                        if (boardCopy[x][k].value != 0) {
-                            boardCopy[x][y] = boardCopy[x][k];
-                            boardCopy[x][k] = new Tile(TileColor.BLUE, x, y, 0);
-                            break;
+                        for (int k = y - 1; k >= 0; k--) {
+                            if (boardCopy[x][k].value != 0) {
+                                boardCopy[x][y] = boardCopy[x][k];
+                                boardCopy[x][k] = new Tile(TileColor.EMPTY, x, y, 0);
+                                break;
+                            }
                         }
                     }
                 }
+
             }
 
+            board = boardCopy;
+            mergeDown();
         }
-
-        board = boardCopy;
-        mergeDown();
 
     }
 
@@ -237,7 +250,19 @@ public class Board {
     public void printBoard() {
         for (int y = 0; y < 4; y++) {
             for (int x = 0; x < 4; x++) {
-                System.out.print(board[x][y].value);
+                if (board[x][y].tileColor == TileColor.BLUE) {
+                    System.out.print("B" + board[x][y].value + " ");
+
+                }
+                else if (board[x][y].tileColor == TileColor.GREY) {
+                    System.out.print("G" + board[x][y].value + " ");
+                }
+                else if(board[x][y].tileColor == TileColor.RED) {
+                    System.out.print("R" + board[x][y].value + " ");
+                }
+                else {
+                    System.out.print(" 0 ");
+                }
             }
             System.out.println(" ");
         }
