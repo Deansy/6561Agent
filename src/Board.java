@@ -99,14 +99,25 @@ public class Board {
     private void mergeUp() {
         for (int i = 0; i < 4; i++) {
             for (int j = 3; j > 0; j--) {
-                if ((board[i][j].value != 0) && board[i][j].value == (board[i][j-1]).value ) {
-                    // TODO: handle merging and deletion based on colour
-                    int value1 = board[i][j].value;
-                    int value2 = board[i][j-1].value;
+                Tile tileOne = board[i][j];
+                Tile tileTwo = board[i][j-1];
+                if ((tileOne.value != 0) && tileOne.value == tileTwo.value ) {
 
-                    board[i][j] = new Tile(TileColor.BLUE, j, i, value1 * 3);
+                    if (tileOne.tileColor == tileTwo.tileColor) {
+                        board[i][j] = new Tile(tileOne.tileColor, j, i, tileOne.value * 3);
 
-                    board[i][j-1] = new Tile(TileColor.EMPTY, i, j - 1, 0);
+                        board[i][j-1] = new Tile(TileColor.EMPTY, i, j - 1, 0);
+                    }
+                    else{
+                        //TODO: Merging is being done bottom up rather than top down?
+                        // This is affecting which tiles are merged and what ones are deleted
+                        board[i][j] = new Tile(TileColor.EMPTY, j, i, 0);
+                        board[i][j-1] = new Tile(TileColor.EMPTY, i, j - 1, 0);
+                    }
+
+
+
+
                 }
             }
         }
