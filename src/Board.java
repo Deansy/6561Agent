@@ -104,13 +104,13 @@ public class Board {
                 if ((tileOne.value != 0) && tileOne.value == tileTwo.value ) {
 
                     if (tileOne.tileColor == tileTwo.tileColor) {
+                        //TODO: Merging is being done bottom up rather than top down?
+                        // This is affecting which tiles are merged and what ones are deleted
                         board[i][j] = new Tile(tileOne.tileColor, j, i, tileOne.value * 3);
-
                         board[i][j-1] = new Tile(TileColor.EMPTY, i, j - 1, 0);
                     }
                     else{
-                        //TODO: Merging is being done bottom up rather than top down?
-                        // This is affecting which tiles are merged and what ones are deleted
+
                         board[i][j] = new Tile(TileColor.EMPTY, j, i, 0);
                         board[i][j-1] = new Tile(TileColor.EMPTY, i, j - 1, 0);
                     }
@@ -270,5 +270,29 @@ public class Board {
         }
 
         System.out.println(" ");
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+
+        Board otherBoard = (Board) obj;
+
+        for (int x = 0; x < boardWidth; x++) {
+            for (int y = 0; y < boardHeight; y++) {
+                if (otherBoard.board[x][y] != board[x][y]) {
+                    return false;
+                }
+            }
+        }
+
+
+        return true;
     }
 }
