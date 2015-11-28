@@ -4,34 +4,50 @@ public class Main {
 
 
 
-        Board b = new Board();
+        Board mainBoard = new Board();
 
-        b.placeTile(Board.TileColor.RED, 0, 1, 3);
-        b.placeTile(Board.TileColor.RED, 0, 2, 3);
-        b.placeTile(Board.TileColor.BLUE, 0, 3, 3);
+        mainBoard.placeTile(Board.TileColor.RED, 0, 1, 3);
+        mainBoard.placeTile(Board.TileColor.RED, 0, 2, 3);
+        mainBoard.placeTile(Board.TileColor.BLUE, 0, 3, 3);
 
-        b.placeTile(Board.TileColor.GREY, 1, 0, 1);
-        b.placeTile(Board.TileColor.BLUE, 1, 1, 1);
-        b.placeTile(Board.TileColor.BLUE, 1, 2, 1);
-        b.placeTile(Board.TileColor.RED, 1, 3, 1);
-
-
-        b.placeTile(Board.TileColor.BLUE, 2, 1, 9);
-        b.placeTile(Board.TileColor.BLUE, 2, 3, 9);
+        mainBoard.placeTile(Board.TileColor.GREY, 1, 0, 1);
+        mainBoard.placeTile(Board.TileColor.BLUE, 1, 1, 1);
+        mainBoard.placeTile(Board.TileColor.BLUE, 1, 2, 1);
+        mainBoard.placeTile(Board.TileColor.RED, 1, 3, 1);
 
 
-        b.placeTile(Board.TileColor.RED, 3, 0, 9);
-        b.placeTile(Board.TileColor.GREY, 3, 1, 3);
-        b.placeTile(Board.TileColor.GREY, 3, 2, 1);
-        b.placeTile(Board.TileColor.GREY, 3, 3, 1);
+        mainBoard.placeTile(Board.TileColor.BLUE, 2, 1, 9);
+        mainBoard.placeTile(Board.TileColor.BLUE, 2, 3, 9);
 
 
-        b.printBoard();
+        mainBoard.placeTile(Board.TileColor.RED, 3, 0, 9);
+        mainBoard.placeTile(Board.TileColor.GREY, 3, 1, 3);
+        mainBoard.placeTile(Board.TileColor.GREY, 3, 2, 1);
+        mainBoard.placeTile(Board.TileColor.GREY, 3, 3, 1);
 
-        b.slideUp();
+
+        Board testBoard = new Board();
+
+        testBoard.placeTile(Board.TileColor.RED, 0, 0, 9);
+        testBoard.placeTile(Board.TileColor.BLUE, 0, 2, 27);
+        testBoard.placeTile(Board.TileColor.RED, 0, 3, 9);
+
+        testBoard.placeTile(Board.TileColor.BLUE, 3, 0, 1);
+        testBoard.placeTile(Board.TileColor.GREY, 3, 3, 1);
+
+        testBoard.placeTile(Board.TileColor.GREY, 3, 3, 2);
 
 
-        b.printBoard();
+        mainBoard.slideUp();
+
+
+        if (mainBoard.equals(testBoard)) {
+            System.out.println("Test passed");
+        }
+        else {
+            System.out.println("Test failed");
+            mainBoard.printBoard();
+        }
 
 
     }
