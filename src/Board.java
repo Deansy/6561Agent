@@ -60,11 +60,11 @@ public class Board {
         }
 
         board = boardCopy;
-        mergeLeft();
+        mergeRight();
 
     }
 
-    private void mergeLeft() {
+    private void mergeRight() {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 3; j++) {
                 if ((board[j][i].value != 0) && board[j][i].value == (board[j+1][i]).value ) {
@@ -80,7 +80,7 @@ public class Board {
         }
     }
 
-    private void mergeRight() {
+    private void mergeLeft() {
         for (int i = 0; i < 4; i++) {
             for (int j = 3; j > 0; j--) {
                 if ((board[j][i].value != 0) && board[j][i].value == (board[j-1][i]).value ) {
@@ -96,21 +96,24 @@ public class Board {
         }
     }
 
-    private void mergeUp() {
+    private void mergeDown() {
         for (int i = 0; i < 4; i++) {
             for (int j = 3; j > 0; j--) {
                 Tile tileOne = board[i][j];
                 Tile tileTwo = board[i][j-1];
+
+                // We don't want to deal with 'empty tiles' and only with tiles which have the same value
                 if ((tileOne.value != 0) && tileOne.value == tileTwo.value ) {
 
+                    // Merge if the tiles are the same color
                     if (tileOne.tileColor == tileTwo.tileColor) {
-                        //TODO: Merging is being done bottom up rather than top down?
-                        // This is affecting which tiles are merged and what ones are deleted
                         board[i][j] = new Tile(tileOne.tileColor, j, i, tileOne.value * 3);
                         board[i][j-1] = new Tile(TileColor.EMPTY, i, j - 1, 0);
                     }
+                    // Otherwise the tiles will be a different color
+                    // In this case we want to 'destroy' the tiles
                     else{
-
+                        //
                         board[i][j] = new Tile(TileColor.EMPTY, j, i, 0);
                         board[i][j-1] = new Tile(TileColor.EMPTY, i, j - 1, 0);
                     }
@@ -123,19 +126,27 @@ public class Board {
         }
     }
 //
-    private void mergeDown() {
+    private void mergeUp() {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 3; j++) {
-                if ((board[i][j].value != 0) && board[i][j].value == board[i][j+1].value ) {
-                    // TODO: handle merging and deletion based on colour
-                    int value1 = board[i][j].value;
-                    int value2 = board[i][j+1].value;
 
-                    board[i][j] = new Tile(TileColor.BLUE, j, i, value1 * 3);
+                Tile tileOne = board[i][j];
+                Tile tileTwo = board[i][j+1];
 
-                    board[i][j+1] = new Tile(TileColor.EMPTY, i, j + 1, 0);
+                // We don't want to deal with 'empty tiles' and only with tiles which have the same value
+                if ((tileOne.value != 0) && tileOne.value == tileTwo.value ) {
 
-
+                    // Merge if the tiles are the same color
+                    if (tileOne.tileColor == tileTwo.tileColor) {
+                        board[i][j] = new Tile(tileOne.tileColor, j, i, tileOne.value * 3);
+                        board[i][j+1] = new Tile(TileColor.EMPTY, i, j + 1, 0);
+                    }
+                    // Otherwise the tiles will be a different color
+                    // In this case we want to 'destroy' the tiles
+                    else {
+                        board[i][j] = new Tile(TileColor.EMPTY, j, i, 0);
+                        board[i][j+1] = new Tile(TileColor.EMPTY, i, j + 1, 0);
+                    }
                 }
             }
         }
@@ -168,7 +179,7 @@ public class Board {
             }
 
             board = boardCopy;
-            mergeRight();
+            mergeLeft();
         }
 
     }
@@ -198,9 +209,11 @@ public class Board {
             }
 
             board = boardCopy;
-            mergeUp();
+            // Prevents new pieces from being modified on the same turn as they are created
+            if (i == 0)  {
+                mergeUp();
+            }
         }
-
     }
 
     public void slideDown() {
@@ -227,7 +240,10 @@ public class Board {
             }
 
             board = boardCopy;
-            mergeDown();
+
+            if (i == 0) {
+                mergeDown();
+            }
         }
 
     }
