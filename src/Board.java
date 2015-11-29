@@ -1,12 +1,14 @@
 public class Board {
-    Tile board[][];
-    int boardWidth = 4;
-    int boardHeight = 4;
 
+
+    private Tile board[][];
+    final int boardWidth = 4;
+    final int boardHeight = 4;
+
+    // TODO: Relocare these?
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_BLUE = "\u001B[34m";
-    public static final String ANSI_WHITE = "\u001B[37m";
     public static final String ANSI_BLACK = "\u001B[30m";
 
     public enum TileColor {
@@ -301,16 +303,22 @@ public class Board {
 
 
     public void placeTile(TileColor tileColor, int xPos, int yPos, int value) {
-        if (xPos < boardWidth - 1 || xPos >= 0) {
-            if (yPos < boardHeight - 1 || yPos >= 0) {
-                board[xPos][yPos] = new Tile(tileColor, xPos, yPos, value);
+        if (xPos <= boardWidth - 1 && xPos >= 0) {
+            if (yPos <= boardHeight - 1 && yPos >= 0) {
+
+                if (board[xPos][yPos].tileColor != TileColor.EMPTY) {
+                    System.out.println("Can only place tiles in empty slots");
+                }
+                else {
+                    board[xPos][yPos] = new Tile(tileColor, xPos, yPos, value);
+                }
             }
             else {
-                System.out.println("Error placing tile: 1");
+                System.out.println("Invalid Y coordinate");
             }
         }
         else {
-            System.out.println("Error placing tile: 2");
+            System.out.println("Invalid X coordinate");
 
         }
     }
