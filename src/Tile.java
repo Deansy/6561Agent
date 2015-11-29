@@ -22,4 +22,38 @@ public class Tile {
 
         this.value = value;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+
+        Tile otherTile = (Tile) obj;
+
+        if (otherTile.tileColor != tileColor) {
+            return false;
+        }
+
+        if (otherTile.value != value) {
+            return false;
+        }
+
+        if (otherTile.xPos != xPos) {
+            return false;
+        }
+
+        if (otherTile.yPos != yPos) {
+            return false;
+        }
+
+
+
+
+        return true;
+    }
 }

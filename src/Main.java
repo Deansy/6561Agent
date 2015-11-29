@@ -29,13 +29,13 @@ public class Main {
         Board testBoard = new Board();
 
         testBoard.placeTile(Board.TileColor.RED, 0, 0, 9);
-        testBoard.placeTile(Board.TileColor.BLUE, 0, 2, 27);
-        testBoard.placeTile(Board.TileColor.RED, 0, 3, 9);
+        testBoard.placeTile(Board.TileColor.BLUE, 2, 0, 27);
+        testBoard.placeTile(Board.TileColor.RED, 3, 0, 9);
 
-        testBoard.placeTile(Board.TileColor.BLUE, 3, 0, 1);
-        testBoard.placeTile(Board.TileColor.GREY, 3, 3, 1);
+        testBoard.placeTile(Board.TileColor.BLUE, 0, 1, 3);
+        testBoard.placeTile(Board.TileColor.GREY, 3, 1, 3);
 
-        testBoard.placeTile(Board.TileColor.GREY, 3, 3, 2);
+        testBoard.placeTile(Board.TileColor.GREY, 3, 2, 3);
 
 
         mainBoard.slideUp();
