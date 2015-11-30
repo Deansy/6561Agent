@@ -1,5 +1,5 @@
 
-public class Main {
+public class ExampleTest {
     public static void main(String [] args) {
 
 
@@ -24,6 +24,7 @@ public class Main {
         mainBoard.placeTile(Board.TileColor.GREY, 3, 1, 3);
         mainBoard.placeTile(Board.TileColor.GREY, 3, 2, 1);
         mainBoard.placeTile(Board.TileColor.GREY, 3, 3, 1);
+
 
 
         Board testBoard = new Board();
