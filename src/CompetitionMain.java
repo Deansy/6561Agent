@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -5,6 +7,10 @@ import java.util.Scanner;
  */
 public class CompetitionMain {
 
+    Board n;
+    String player;
+    int currentMove;
+    List<Board> previousStates;
 
     public static void main(String [] args) {
 
@@ -14,25 +20,126 @@ public class CompetitionMain {
 
     }
 
+
+
     public void gameLoop() {
 
-        Board n = new Board();
+        n = new Board();
+
+        Scanner in = new Scanner(System.in);
+
+        currentMove = 1;
+        previousStates = new ArrayList<Board>();
+
+
+        player = in.next();
+
+        System.err.println("I am player: " + player);
+
+        // If we are going first
+        if (player.equals("A")) {
+            // place a tile
+
+//            n.placeTile(TileColor.BLUE, 0, 0, 1);
+//            System.out.println("11");
+//            currentMove++;
+//            System.out.flush();
+            performPlaceTurn();
+        }
+
+
+
 
         while (true) {
 
-            // The competition software will send A or B to indicate the player that I am
-            String player;
 
-            Scanner in = new Scanner(System.in);
 
-            player = in.nextLine();
 
-            System.err.println("I amn player: " + player);
-            System.out.flush();
+            if (in.hasNext()) {
+                // Get the other players move
+                String input = in.next();
+
+                // The competition software wants us to exit.
+                if (input.equals("Quit")) {
+                    System.exit(0);
+                }
+
+                if (input.equals("U") || input.equals("D")|| input.equals("L")|| input.equals("R")) {
+                    handleMoveTurn(input);
+
+                }
+                else {
+                    handlePlaceTurn(input);
+
+                }
+
+
+                // TODO: Add logic to determine this
+                boolean isPlaceTurn = true;
+
+                // Play our move
+
+                if (isPlaceTurn) {
+                    performPlaceTurn();
+                }
+                else {
+                    performMoveTurn();
+                }
+
+            }
+
 
         }
 
 
+    }
+
+    // Handle a place turn from the opponent
+    private void handlePlaceTurn(String moveInfo) {
+        // TODO: Log the previous state
+        try {
+            // TODO: Enter the correct colour of tile
+            n.placeTile(TileColor.RED, Integer.parseInt(moveInfo.substring(0,0)), Integer.parseInt(moveInfo.substring(1,1)), 1);
+            currentMove++;
+        }
+        // TODO: Better error handling
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    // Handle a place turn from the opponent
+    private void handleMoveTurn(String moveInfo) {
+        // TODO: Log the previous state
+
+        if (moveInfo.equals("U")) {
+            n.slideUp();
+        }
+        else if (moveInfo.equals("D")) {
+            n.slideDown();
+        }
+        else if (moveInfo.equals("L")) {
+            n.slideLeft();
+        }
+        else if (moveInfo.equals("R")) {
+            n.slideRight();
+        }
+
+
+        currentMove++;
+    }
+
+    // Compute and perform a place turn
+    private void performPlaceTurn() {
+        // TODO: Log the previous state
+
+        //TODO: Add AI Logic
+        n.placeTile(TileColor.GREY, 1,2, 1);
+        System.out.println("23");
+        System.out.flush();
+    }
+    // Compute and perform a move turn
+    private void performMoveTurn() {
+        // TODO: Log the previous state
     }
 
 
@@ -47,7 +154,7 @@ public class CompetitionMain {
         final int boardWidth = 4;
         final int boardHeight = 4;
 
-        // TODO: Relocare these?
+        // TODO: Relocate these?
         public static final String ANSI_RESET = "\u001B[0m";
         public static final String ANSI_RED = "\u001B[31m";
         public static final String ANSI_BLUE = "\u001B[34m";
