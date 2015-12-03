@@ -1,16 +1,25 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-/**
- * Created by camsh on 30/11/2015.
- */
+
 public class CompetitionMain {
 
-    Board n;
+    // The current state of the game board
+    Board currentBoard;
+    // Are we player A or B?
     String player;
+
     int currentMove;
+
+    // Will hold all previous game boards
     List<Board> previousStates;
+
+    // ?, Will hold the type of move to get to that state?
+    // Will allow easy analysis of previous moves?
+    // This could be used to determine if current move is a place/move
+    // Map<MOVE, Board> previousStates
 
     public static void main(String [] args) {
 
@@ -24,13 +33,12 @@ public class CompetitionMain {
 
     public void gameLoop() {
 
-        n = new Board();
+        currentBoard = new Board();
 
         Scanner in = new Scanner(System.in);
 
         currentMove = 1;
-        previousStates = new ArrayList<Board>();
-
+        previousStates = new ArrayList<>();
 
         player = in.next();
 
@@ -40,10 +48,6 @@ public class CompetitionMain {
         if (player.equals("A")) {
             // place a tile
 
-//            n.placeTile(TileColor.BLUE, 0, 0, 1);
-//            System.out.println("11");
-//            currentMove++;
-//            System.out.flush();
             performPlaceTurn();
         }
 
@@ -51,9 +55,6 @@ public class CompetitionMain {
 
 
         while (true) {
-
-
-
 
             if (in.hasNext()) {
                 // Get the other players move
@@ -66,20 +67,18 @@ public class CompetitionMain {
 
                 if (input.equals("U") || input.equals("D")|| input.equals("L")|| input.equals("R")) {
                     handleMoveTurn(input);
-
                 }
                 else {
                     handlePlaceTurn(input);
-
                 }
 
 
-                // TODO: Add logic to determine this
-                boolean isPlaceTurn = true;
+                // The moves in the rotaion which are tile places
+                // All other moves are move turns
+                List<Integer> placeTurns = Arrays.asList(1,2,3,6,7,8);
 
-                // Play our move
 
-                if (isPlaceTurn) {
+                if (placeTurns.contains((currentMove % 10))) {
                     performPlaceTurn();
                 }
                 else {
@@ -98,8 +97,26 @@ public class CompetitionMain {
     private void handlePlaceTurn(String moveInfo) {
         // TODO: Log the previous state
         try {
-            // TODO: Enter the correct colour of tile
-            n.placeTile(TileColor.RED, Integer.parseInt(moveInfo.substring(0,0)), Integer.parseInt(moveInfo.substring(1,1)), 1);
+            
+            TileColor colorToPlace = TileColor.EMPTY;
+
+            // The move number in the current rotation
+            int rotationID = currentMove % 10;
+
+            if (rotationID == 1 || rotationID == 6) {
+                colorToPlace = TileColor.BLUE;
+            }
+            else if (rotationID == 2 || rotationID == 7) {
+                colorToPlace = TileColor.RED;
+            }
+            else if (rotationID == 3 || rotationID == 8) {
+                colorToPlace = TileColor.GREY;
+            }
+
+
+
+
+            currentBoard.placeTile(colorToPlace, Integer.parseInt(moveInfo.substring(0,0)), Integer.parseInt(moveInfo.substring(1,1)), 1);
             currentMove++;
         }
         // TODO: Better error handling
@@ -112,16 +129,16 @@ public class CompetitionMain {
         // TODO: Log the previous state
 
         if (moveInfo.equals("U")) {
-            n.slideUp();
+            currentBoard.slideUp();
         }
         else if (moveInfo.equals("D")) {
-            n.slideDown();
+            currentBoard.slideDown();
         }
         else if (moveInfo.equals("L")) {
-            n.slideLeft();
+            currentBoard.slideLeft();
         }
         else if (moveInfo.equals("R")) {
-            n.slideRight();
+            currentBoard.slideRight();
         }
 
 
@@ -133,7 +150,7 @@ public class CompetitionMain {
         // TODO: Log the previous state
 
         //TODO: Add AI Logic
-        n.placeTile(TileColor.GREY, 1,2, 1);
+        currentBoard.placeTile(TileColor.GREY, 1,2, 1);
         System.out.println("23");
         System.out.flush();
     }
