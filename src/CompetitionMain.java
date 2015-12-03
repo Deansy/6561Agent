@@ -1,20 +1,17 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 
 public class CompetitionMain {
 
     // The current state of the game board
-    Board currentBoard;
+    private Board currentBoard;
     // Are we player A or B?
-    String player;
+    private String player;
 
-    int currentMove;
+    private int currentMove;
 
     // Will hold all previous game boards
-    List<Board> previousStates;
+    private List<Board> previousStates;
 
     // ?, Will hold the type of move to get to that state?
     // Will allow easy analysis of previous moves?
@@ -31,7 +28,7 @@ public class CompetitionMain {
 
 
 
-    public void gameLoop() {
+    private void gameLoop() {
 
         currentBoard = new Board();
 
@@ -47,7 +44,6 @@ public class CompetitionMain {
         // If we are going first
         if (player.equals("A")) {
             // place a tile
-
             performPlaceTurn();
         }
 
@@ -73,7 +69,7 @@ public class CompetitionMain {
                 }
 
 
-                // The moves in the rotaion which are tile places
+                // The moves in the rotation which are tile places
                 // All other moves are move turns
                 List<Integer> placeTurns = Arrays.asList(1,2,3,6,7,8);
 
@@ -97,26 +93,7 @@ public class CompetitionMain {
     private void handlePlaceTurn(String moveInfo) {
         // TODO: Log the previous state
         try {
-            
-            TileColor colorToPlace = TileColor.EMPTY;
-
-            // The move number in the current rotation
-            int rotationID = currentMove % 10;
-
-            if (rotationID == 1 || rotationID == 6) {
-                colorToPlace = TileColor.BLUE;
-            }
-            else if (rotationID == 2 || rotationID == 7) {
-                colorToPlace = TileColor.RED;
-            }
-            else if (rotationID == 3 || rotationID == 8) {
-                colorToPlace = TileColor.GREY;
-            }
-
-
-
-
-            currentBoard.placeTile(colorToPlace, Integer.parseInt(moveInfo.substring(0,0)), Integer.parseInt(moveInfo.substring(1,1)), 1);
+            currentBoard.placeTile(getTileColorForCurrentMove(), Integer.parseInt(moveInfo.substring(0,0)), Integer.parseInt(moveInfo.substring(1,1)), 1);
             currentMove++;
         }
         // TODO: Better error handling
@@ -124,6 +101,9 @@ public class CompetitionMain {
             e.printStackTrace();
         }
     }
+
+
+
     // Handle a place turn from the opponent
     private void handleMoveTurn(String moveInfo) {
         // TODO: Log the previous state
@@ -149,14 +129,71 @@ public class CompetitionMain {
     private void performPlaceTurn() {
         // TODO: Log the previous state
 
-        //TODO: Add AI Logic
-        currentBoard.placeTile(TileColor.GREY, 1,2, 1);
-        System.out.println("23");
-        System.out.flush();
+        // Place a random tile
+        Random rand = new Random();
+        int x = rand.nextInt(4);
+        int y = rand.nextInt(4);
+
+        if (currentBoard.isEmpty(x, y)) {
+            currentBoard.placeTile(getTileColorForCurrentMove(), x, y, 1);
+            x = x+1;
+            y = y+1;
+            System.out.println(x + "" + y);
+            System.out.flush();
+        }
+        else {
+            // Couldn't place a move, Try again
+            performPlaceTurn();
+        }
     }
     // Compute and perform a move turn
     private void performMoveTurn() {
         // TODO: Log the previous state
+
+        // Perform a random move
+        Random rand = new Random();
+        int n = rand.nextInt(4);
+
+        switch (n) {
+            case 0:
+                // UP
+                System.out.println("U");
+                break;
+            case 1:
+                // DOWN
+                System.out.println("D");
+                break;
+            case 2:
+                // LEFT
+                System.out.println("L");
+                break;
+            case 3:
+                // RIGHT
+                System.out.println("R");
+                break;
+            default:
+                System.exit(0);
+                break;
+        }
+
+        System.out.flush();
+    }
+
+    private TileColor getTileColorForCurrentMove() {
+        TileColor colorToPlace = TileColor.EMPTY;
+        // The move number in the current rotation
+        int rotationID = currentMove % 10;
+
+        if (rotationID == 1 || rotationID == 6) {
+            colorToPlace = TileColor.BLUE;
+        }
+        else if (rotationID == 2 || rotationID == 7) {
+            colorToPlace = TileColor.RED;
+        }
+        else if (rotationID == 3 || rotationID == 8) {
+            colorToPlace = TileColor.GREY;
+        }
+        return colorToPlace;
     }
 
 
@@ -533,9 +570,17 @@ public class CompetitionMain {
 
             return true;
         }
+
+        public boolean isEmpty(int x, int y) {
+            if (board[x][y].tileColor == TileColor.EMPTY) {
+                return true;
+            }
+
+            return false;
+        }
     }
 
-    class Tile {
+    private class Tile {
         int value;
         TileColor tileColor;
 
