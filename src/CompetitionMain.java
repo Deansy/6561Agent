@@ -24,6 +24,7 @@ public class CompetitionMain {
 
         main.gameLoop();
 
+
     }
 
 
@@ -75,9 +76,11 @@ public class CompetitionMain {
 
 
                 if (placeTurns.contains((currentMove % 10))) {
+                    System.err.println("Doing Place: Turn: " + currentMove);
                     performPlaceTurn();
                 }
                 else {
+                    System.err.println("Doing Move: Turn: " + currentMove);
                     performMoveTurn();
                 }
 
@@ -93,7 +96,8 @@ public class CompetitionMain {
     private void handlePlaceTurn(String moveInfo) {
         // TODO: Log the previous state
         try {
-            currentBoard.placeTile(getTileColorForCurrentMove(), Integer.parseInt(moveInfo.substring(0,0)), Integer.parseInt(moveInfo.substring(1,1)), 1);
+            System.err.println("Handle Place: + " + currentMove );
+            currentBoard.placeTile(getTileColorForCurrentMove(), Integer.parseInt(moveInfo.substring(0,1)), Integer.parseInt(moveInfo.substring(1,2)), 1);
             currentMove++;
         }
         // TODO: Better error handling
@@ -108,6 +112,7 @@ public class CompetitionMain {
     private void handleMoveTurn(String moveInfo) {
         // TODO: Log the previous state
 
+        System.err.println("Handle Move: + " + currentMove );
         if (moveInfo.equals("U")) {
             currentBoard.slideUp();
         }
@@ -139,6 +144,10 @@ public class CompetitionMain {
             x = x+1;
             y = y+1;
             System.out.println(x + "" + y);
+            System.err.println("Move " + currentMove + ": " + x + "" + y);
+
+            currentMove++;
+
             System.out.flush();
         }
         else {
@@ -175,6 +184,8 @@ public class CompetitionMain {
                 System.exit(0);
                 break;
         }
+
+        currentMove++;
 
         System.out.flush();
     }
@@ -507,18 +518,18 @@ public class CompetitionMain {
                 if (yPos <= boardHeight - 1 && yPos >= 0) {
 
                     if (board[xPos][yPos].tileColor != TileColor.EMPTY) {
-                        System.out.println("Can only place tiles in empty slots");
+                        System.err.println("Can only place tiles in empty slots");
                     }
                     else {
                         board[xPos][yPos] = new Tile(tileColor, xPos, yPos, value);
                     }
                 }
                 else {
-                    System.out.println("Invalid Y coordinate");
+                    System.err.println("Invalid Y coordinate");
                 }
             }
             else {
-                System.out.println("Invalid X coordinate");
+                System.err.println("Invalid X coordinate");
 
             }
         }
