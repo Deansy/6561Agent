@@ -215,12 +215,30 @@ public class CompetitionMain {
             performMoveTurn();
         }
         else {
+            //TODO: Ensure the move actually changes the game board
+
+
+            switch (move) {
+                case "U" :
+                    currentBoard.slideUp();
+                    break;
+                case "D":
+                    currentBoard.slideDown();
+                    break;
+                case "L":
+                    currentBoard.slideLeft();
+                    break;
+                case "R":
+                    currentBoard.slideRight();
+                    break;
+            }
+
+
             System.out.println(move);
             System.err.println("Move " + currentMove + "- U");
             currentMove++;
+
         }
-
-
 
         System.out.flush();
     }
