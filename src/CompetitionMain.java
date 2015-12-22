@@ -185,58 +185,39 @@ public class CompetitionMain {
         Random rand = new Random();
         int n = rand.nextInt(4);
 
+        String move = " ";
+
         switch (n) {
             case 0:
                 // UP
-                if (previousMove.equals("U")) {
-                    System.err.println("Duplicate move, Retrying");
-                    performMoveTurn();
-                }
-                else {
-                    System.out.println("U");
-                    System.err.println("Move " + currentMove + "- U");
-                    currentMove++;
-                }
+                move = "U";
                 break;
             case 1:
                 // DOWN
-                if (previousMove.equals("D")) {
-                    System.err.println("Duplicate move, Retrying");
-                    performMoveTurn();
-                }
-                else {
-                    System.out.println("D");
-                    System.err.println("Move " + currentMove + "- D");
-                    currentMove++;
-                }
+                move = "D";
                 break;
             case 2:
                 // LEFT
-                if (previousMove.equals("L")) {
-                    System.err.println("Duplicate move, Retrying");
-                    performMoveTurn();
-                }
-                else {
-                    System.out.println("L");
-                    System.err.println("Move " + currentMove + "- L");
-                    currentMove++;
-                }
+                move = "L";
                 break;
             case 3:
                 // RIGHT
-                if (previousMove.equals("R")) {
-                    System.err.println("Duplicate move, Retrying");
-                    performMoveTurn();
-                }
-                else {
-                    System.out.println("R");
-                    System.err.println("Move " + currentMove + "- R");
-                    currentMove++;
-                }
+                move = "R";
                 break;
             default:
                 System.exit(0);
                 break;
+        }
+
+
+        if (previousMove.equals(move)) {
+            System.err.println("Duplicate move, Retrying");
+            performMoveTurn();
+        }
+        else {
+            System.out.println(move);
+            System.err.println("Move " + currentMove + "- U");
+            currentMove++;
         }
 
 
