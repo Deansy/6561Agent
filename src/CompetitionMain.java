@@ -60,8 +60,11 @@ public class CompetitionMain {
 
                 // The competition software wants us to exit.
                 if (input.equals("Quit")) {
+                    currentBoard.printBoard(true);
+
                     System.exit(0);
                 }
+
 
                 if (input.equals("U") || input.equals("D")|| input.equals("L")|| input.equals("R")) {
                     handleMoveTurn(input);
@@ -77,11 +80,11 @@ public class CompetitionMain {
 
 
                 if (placeTurns.contains((currentMove % 10))) {
-                    System.err.println("Doing Place: Turn: " + currentMove);
+                    //System.err.println("Doing Place: Turn: " + currentMove);
                     performPlaceTurn();
                 }
                 else {
-                    System.err.println("Doing Move: Turn: " + currentMove);
+                    //System.err.println("Doing Move: Turn: " + currentMove);
                     performMoveTurn();
                 }
 
@@ -103,7 +106,8 @@ public class CompetitionMain {
             // I think this is sending the wrong values to my board, Hence the - 1
             int xPos = Integer.parseInt(moveInfo.substring(0,1));
             int yPos = Integer.parseInt(moveInfo.substring(1,2));
-            currentBoard.placeTile(getTileColorForCurrentMove(),xPos - 1,yPos - 1, 1);
+            currentBoard.placeTile(getTileColorForCurrentMove(),xPos,yPos, 1);
+            System.err.println("Move " + currentMove + " - X:" + xPos + " Y:" + yPos);
             currentMove++;
         }
         // TODO: Better error handling
@@ -134,6 +138,7 @@ public class CompetitionMain {
         }
 
 
+        System.err.println("Move " + currentMove + " - " + moveInfo);
         currentMove++;
     }
 
@@ -149,12 +154,14 @@ public class CompetitionMain {
         // TODO: Fix the coordiante issue, make my grid implementation match the games
         if (currentBoard.isEmpty(x, y)) {
 
-            x = x+1;
-            y = y+1;
+
+            x++;
+            y++;
+
 
             String move = x + "" + y;
             if (!move.equals(previousMove)) {
-                currentBoard.placeTile(getTileColorForCurrentMove(), x-1, y-1, 1);
+                currentBoard.placeTile(getTileColorForCurrentMove(), x, y, 1);
                 System.out.println(move);
                 System.err.println("Move " + currentMove + " - X:" + x + " Y:" + y);
                 currentMove++;
@@ -215,7 +222,7 @@ public class CompetitionMain {
             performMoveTurn();
         }
         else {
-            //TODO: Ensure the move actually changes the game board
+            Board beforeMove = new Board(currentBoard);
 
 
             switch (move) {
@@ -233,10 +240,15 @@ public class CompetitionMain {
                     break;
             }
 
-
-            System.out.println(move);
-            System.err.println("Move " + currentMove + "- U");
-            currentMove++;
+            if (currentBoard.equals(beforeMove)) {
+                System.err.println("Move had no effect");
+                performMoveTurn();
+            }
+            else {
+                System.out.println(move);
+                System.err.println("Move " + currentMove + " - " + move);
+                currentMove++;
+            }
 
         }
 

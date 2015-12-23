@@ -21,6 +21,17 @@ public class Board {
 
     }
 
+    public Board(Board oldBoard) {
+        // A more effecient method is probably possible
+        board = new Tile[boardWidth][boardHeight] ;
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                board[i][j] = oldBoard.board[i][j];
+            }
+
+        }
+    }
+
     public void initBoard() {
 
         for (int i = 0; i < 4; i++) {
@@ -75,7 +86,7 @@ public class Board {
         }
     }
 
-    private void mergeRight() {
+    private void mergeLeft() {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 3; j++) {
 
@@ -103,7 +114,7 @@ public class Board {
         }
     }
 
-    private void mergeLeft() {
+    private void mergeRight() {
         for (int i = 0; i < 4; i++) {
             for (int j = 3; j > 0; j--) {
 
@@ -303,10 +314,13 @@ public class Board {
 
 
     public void placeTile(TileColor tileColor, int xPos, int yPos, int value) {
-        if (xPos <= boardWidth - 1 && xPos >= 0) {
-            if (yPos <= boardHeight - 1 && yPos >= 0) {
+        if (xPos <= boardWidth && xPos >= 1) {
+            if (yPos <= boardHeight && yPos >= 1) {
 
-                if (board[xPos][yPos].tileColor != TileColor.EMPTY) {
+                xPos--;
+                yPos--;
+
+                if (board[yPos][xPos].value != 0) {
                     System.err.println("Can only place tiles in empty slots, Printing board");
                     System.err.println("X:" + xPos + " Y:" + yPos );
 
@@ -315,7 +329,7 @@ public class Board {
 
                 }
                 else {
-                    board[xPos][yPos] = new Tile(tileColor, xPos, yPos, value);
+                    board[yPos][xPos] = new Tile(tileColor, yPos, xPos, value);
                 }
             }
             else {
@@ -396,7 +410,7 @@ public class Board {
     }
 
     public boolean isEmpty(int x, int y) {
-        if (board[x][y].tileColor == TileColor.EMPTY) {
+        if (board[y][x].tileColor == TileColor.EMPTY) {
             return true;
         }
 
