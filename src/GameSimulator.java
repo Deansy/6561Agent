@@ -1,25 +1,19 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Scanner;
 
 /**
  * Created by camsh on 22/12/2015.
  */
-public class GamePlayer {
+public class GameSimulator {
 
     public static void main(String[] args) {
-        GamePlayer gp = new GamePlayer();
+        GameSimulator gp = new GameSimulator();
 
     }
 
-    public GamePlayer() {
+    public GameSimulator() {
 
         Board game = new Board();
-
-
-
-
-
 
         try {
 

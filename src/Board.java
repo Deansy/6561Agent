@@ -1,3 +1,8 @@
+import com.sun.tools.javac.util.Pair;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by camsh on 22/12/2015.
  */
@@ -49,42 +54,32 @@ public class Board {
     // Create a thread for each row and have each thread slide only one row
 
 
+    public void getSlides() {
+        // TODO: Implement
+    }
 
-    public void slideLeft() {
+    // TODO: Think up a better parameter name
+    public List<Pair<Integer, Integer>> getPlaces(TileColor colorToConsider) {
 
-        // Code must be run twice to ensure proper shifting and merging
-        for (int i = 0; i < 2; i++) {
-
-            // Copy the board, Perform any operations and replace the board afterwards
-            Tile[][] boardCopy = board.clone();
+        // A list of grid coordinates for tile placement
+        List<Pair<Integer, Integer>> places = new ArrayList<>();
 
 
-            for (int y = 0; y < 4; y++) {
-                for (int x = 0; x < 4; x++) {
-                    if (boardCopy[x][y].value == 0) {
+        for (int x = 0; x < boardHeight; x++) {
+            for (int y = 0; y < boardWidth; y++) {
+                // For each tile
 
-                        for (int k = x + 1; k < 4; k++) {
-                            if (boardCopy[k][y].value != 0) {
-                                boardCopy[x][y] = boardCopy[k][y];
-
-                                boardCopy[x][y].xPos = x;
-                                boardCopy[x][y].yPos = y;
-
-                                boardCopy[k][y] = new Tile(TileColor.EMPTY, k, y, 0);
-                                break;
-                            }
-                        }
-                    }
+                if (isEmpty(x, y)) {
+                    // Add each possible location suitable for a tile here
+                    places.add(new Pair<>(x, y));
                 }
             }
-
-            board = boardCopy;
-            // Prevents new pieces from being modified on the same turn as they are created
-            if (i == 0) {
-                mergeLeft();
-            }
         }
+
+        return places;
     }
+
+
 
     private void mergeLeft() {
         for (int i = 0; i < 4; i++) {
@@ -201,7 +196,41 @@ public class Board {
         }
     }
 
+    public void slideLeft() {
 
+        // Code must be run twice to ensure proper shifting and merging
+        for (int i = 0; i < 2; i++) {
+
+            // Copy the board, Perform any operations and replace the board afterwards
+            Tile[][] boardCopy = board.clone();
+
+
+            for (int y = 0; y < 4; y++) {
+                for (int x = 0; x < 4; x++) {
+                    if (boardCopy[x][y].value == 0) {
+
+                        for (int k = x + 1; k < 4; k++) {
+                            if (boardCopy[k][y].value != 0) {
+                                boardCopy[x][y] = boardCopy[k][y];
+
+                                boardCopy[x][y].xPos = x;
+                                boardCopy[x][y].yPos = y;
+
+                                boardCopy[k][y] = new Tile(TileColor.EMPTY, k, y, 0);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            board = boardCopy;
+            // Prevents new pieces from being modified on the same turn as they are created
+            if (i == 0) {
+                mergeLeft();
+            }
+        }
+    }
 
     public void slideRight() {
 

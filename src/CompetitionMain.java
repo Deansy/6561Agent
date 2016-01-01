@@ -117,7 +117,6 @@ public class CompetitionMain {
     }
 
 
-
     // Handle a place turn from the opponent
     private void handleMoveTurn(String moveInfo) {
         // Logging this move
@@ -182,6 +181,7 @@ public class CompetitionMain {
             //System.exit(0);
         }
     }
+
     // Compute and perform a move turn
     private void performMoveTurn() {
         // TODO: Log the previous state
