@@ -69,7 +69,6 @@ public class CompetitionMain {
 
                 // The competition software wants us to exit.
                 if (input.equals("Quit")) {
-                    //currentBoard.printBoard(true);
 
                     System.exit(0);
                 }

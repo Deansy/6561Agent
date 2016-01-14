@@ -48,7 +48,7 @@ public class DepthLimitedDFSAgent implements Player {
             currentBoard.slideBoard(Board.MOVE.DOWN);
         }
         else if (moveInfo.equals("L")) {
-            currentBoard.slideBoard(Board.MOVE.UP);
+            currentBoard.slideBoard(Board.MOVE.LEFT);
         }
         else if (moveInfo.equals("R")) {
             currentBoard.slideBoard(Board.MOVE.RIGHT);
@@ -99,8 +99,7 @@ public class DepthLimitedDFSAgent implements Player {
         int x = moveToMake.first;
         int y = moveToMake.second;
 
-        //TODO: Fix is empty
-        if (currentBoard.isEmpty(x-1, y-1)) {
+        if (currentBoard.isEmpty(x, y)) {
 
             currentBoard.placeTile(CompetitionMain.getTileColorForMove(currentMove), x, y, 1);
             System.out.println("" + x + "" + y);
@@ -149,8 +148,6 @@ public class DepthLimitedDFSAgent implements Player {
         } else {
             System.err.println("No slides available");
         }
-
-        System.err.println("Attempting to slide");
 
         // Perform the chosen move
         currentBoard.slideBoard(move);

@@ -14,6 +14,7 @@ public class GameSimulator {
     public GameSimulator() {
 
         Board game = new Board();
+        Player p = new DepthLimitedDFSAgent(game);
 
         try {
 
@@ -102,12 +103,12 @@ public class GameSimulator {
                 }
 
                 if (line.startsWith("aiplace")) {
-                    Player p = new DepthLimitedDFSAgent(game);
+
                     p.performPlaceTurn();
                 }
 
                 if (line.startsWith("slide")) {
-                    Player p = new DepthLimitedDFSAgent(game);
+
                     p.performMoveTurn();
                 }
 

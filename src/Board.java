@@ -31,9 +31,9 @@ public class Board {
     public Board(Board oldBoard) {
         // A more effecient method is probably possible
         board = new Tile[boardWidth][boardHeight] ;
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                board[i][j] = oldBoard.board[i][j];
+        for (int x = 0; x < 4; x++) {
+            for (int y = 0; y < 4; y++) {
+                board[x][y] = oldBoard.board[x][y];
             }
 
         }
@@ -41,12 +41,13 @@ public class Board {
 
     public void initBoard() {
 
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                board[i][j] = new Tile(TileColor.EMPTY, i, j, 0);
+        for (int x = 0; x < 4; x++) {
+            for (int y = 0; y < 4; y++) {
+                board[x][y] = new Tile(TileColor.EMPTY, x, y, 0);
             }
-
         }
+
+
 
 
     }
@@ -67,28 +68,12 @@ public class Board {
 
         // Left
         b = new Board(this);
-        b.slideLeft();
-        if (!b.equals(this)) {
-            // The slide affected something
-            Pair<MOVE, Board> p = new Pair<>(MOVE.LEFT, b);
-            validSlidesWithBoard.add(p);
-
-        }
-
-        b = new Board(this);
-        b.slideRight();
-        if (!b.equals(this)) {
-            // The slide affected something
-            Pair<MOVE, Board> p = new Pair<>(MOVE.RIGHT, b);
-            validSlidesWithBoard.add(p);
-        }
-
-        b = new Board(this);
         b.slideUp();
         if (!b.equals(this)) {
             // The slide affected something
             Pair<MOVE, Board> p = new Pair<>(MOVE.UP, b);
             validSlidesWithBoard.add(p);
+
         }
 
         b = new Board(this);
@@ -96,6 +81,22 @@ public class Board {
         if (!b.equals(this)) {
             // The slide affected something
             Pair<MOVE, Board> p = new Pair<>(MOVE.DOWN, b);
+            validSlidesWithBoard.add(p);
+        }
+
+        b = new Board(this);
+        b.slideLeft();
+        if (!b.equals(this)) {
+            // The slide affected something
+            Pair<MOVE, Board> p = new Pair<>(MOVE.LEFT, b);
+            validSlidesWithBoard.add(p);
+        }
+
+        b = new Board(this);
+        b.slideRight();
+        if (!b.equals(this)) {
+            // The slide affected something
+            Pair<MOVE, Board> p = new Pair<>(MOVE.RIGHT, b);
             validSlidesWithBoard.add(p);
         }
         return validSlidesWithBoard;
@@ -107,24 +108,10 @@ public class Board {
         List<MOVE> validSlides = new ArrayList<>();
         Board b;
 
-        // Left
-        b = new Board(this);
-        b.slideLeft();
-
-        if (!b.equals(this)) {
-            // The slide affected something
-            validSlides.add(MOVE.LEFT);
-        }
-
-        b = new Board(this);
-        b.slideRight();
-        if (!b.equals(this)) {
-            // The slide affected something
-            validSlides.add(MOVE.RIGHT);
-        }
 
         b = new Board(this);
         b.slideUp();
+
         if (!b.equals(this)) {
             // The slide affected something
             validSlides.add(MOVE.UP);
@@ -135,6 +122,20 @@ public class Board {
         if (!b.equals(this)) {
             // The slide affected something
             validSlides.add(MOVE.DOWN);
+        }
+
+        b = new Board(this);
+        b.slideLeft();
+        if (!b.equals(this)) {
+            // The slide affected something
+            validSlides.add(MOVE.LEFT);
+        }
+
+        b = new Board(this);
+        b.slideRight();
+        if (!b.equals(this)) {
+            // The slide affected something
+            validSlides.add(MOVE.RIGHT);
         }
 
         return validSlides;
@@ -177,7 +178,7 @@ public class Board {
             for (int y = 1; y <= boardWidth; y++) {
                 // For each tile
 
-                if (isEmpty(x-1, y-1)) {
+                if (isEmpty(x, y)) {
                     // Add each possible location suitable for a tile here
                     places.add(new Pair<>(x, y));
                 }
@@ -189,7 +190,7 @@ public class Board {
 
 
 
-    private void mergeLeft() {
+    private void mergeUp() {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 3; j++) {
 
@@ -209,7 +210,7 @@ public class Board {
                     // In this case we want to 'destroy' the tiles
                     else {
                         board [j][i] = new Tile(TileColor.EMPTY, j, i, 0);
-                        board [j+1][i] = new Tile(TileColor.EMPTY, j + 1, i, 0);
+                        board [j+1][i] = new Tile(TileColor.EMPTY, j+1, i, 0);
                     }
 
                 }
@@ -217,7 +218,7 @@ public class Board {
         }
     }
 
-    private void mergeRight() {
+    private void mergeDown() {
         for (int i = 0; i < 4; i++) {
             for (int j = 3; j > 0; j--) {
 
@@ -248,7 +249,7 @@ public class Board {
         }
     }
 
-    private void mergeDown() {
+    private void mergeRight() {
         for (int i = 0; i < 4; i++) {
             for (int j = 3; j > 0; j--) {
                 Tile tileOne = board[i][j];
@@ -278,7 +279,7 @@ public class Board {
         }
     }
     //
-    private void mergeUp() {
+    private void mergeLeft() {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 3; j++) {
 
@@ -304,7 +305,7 @@ public class Board {
         }
     }
 
-    private void slideLeft() {
+    private void slideUp() {
 
         // Code must be run twice to ensure proper shifting and merging
         for (int i = 0; i < 2; i++) {
@@ -335,12 +336,12 @@ public class Board {
             board = boardCopy;
             // Prevents new pieces from being modified on the same turn as they are created
             if (i == 0) {
-                mergeLeft();
+                mergeUp();
             }
         }
     }
 
-    private void slideRight() {
+    private void slideDown() {
 
         // Code must be run twice to ensure all tiles are shifted and merged
         for (int i = 0; i < 2; i++) {
@@ -371,13 +372,13 @@ public class Board {
             board = boardCopy;
             // Prevents new pieces from being modified on the same turn as they are created
             if (i == 0) {
-                mergeRight();
+                mergeDown();
             }
         }
 
     }
 
-    private void slideUp() {
+    private void slideLeft() {
 
         // Code must be run twice to ensure proper shifting and merging
         for (int i = 0; i < 2; i++) {
@@ -408,12 +409,12 @@ public class Board {
             board = boardCopy;
             // Prevents new pieces from being modified on the same turn as they are created
             if (i == 0)  {
-                mergeUp();
+                mergeLeft();
             }
         }
     }
 
-    private void slideDown() {
+    private void slideRight() {
 
         for (int i = 0; i < 2; i++) {
             // Copy the board, Perform any operations and replace the board afterwards
@@ -443,7 +444,7 @@ public class Board {
             board = boardCopy;
 
             if (i == 0) {
-                mergeDown();
+                mergeRight();
             }
         }
 
@@ -454,19 +455,24 @@ public class Board {
         if (xPos <= boardWidth && xPos >= 1) {
             if (yPos <= boardHeight && yPos >= 1) {
 
-                xPos--;
-                yPos--;
 
-                if (board[yPos][xPos].value != 0) {
+
+
+//                if (board[xPos-1][yPos-1].value != 0) {
+//                    System.err.println("Can only place tiles in empty slots, Printing board");
+//                    System.err.println("X:" + xPos + " Y:" + yPos );
+//
+//                    printBoard(true);
+//                }
+
+                if(board[xPos-1][yPos-1].tileColor != TileColor.EMPTY) {
                     System.err.println("Can only place tiles in empty slots, Printing board");
                     System.err.println("X:" + xPos + " Y:" + yPos );
 
                     printBoard(true);
-
-
                 }
                 else {
-                    board[yPos][xPos] = new Tile(tileColor, yPos, xPos, value);
+                    board[xPos-1][yPos-1] = new Tile(tileColor, xPos-1, yPos-1, value);
                 }
             }
             else {
@@ -481,8 +487,8 @@ public class Board {
 
     public void printBoard(boolean errorPrint) {
         if (errorPrint) {
-            for (int y = 0; y < 4; y++) {
-                for (int x = 0; x < 4; x++) {
+            for (int x = 0; x < 4; x++) {
+                for (int y = 0; y < 4; y++) {
                     if (board[x][y].tileColor == TileColor.BLUE) {
                         //System.out.println(ANSI_RED + "This text is red!" + ANSI_RESET);
                         System.err.print(ANSI_BLUE + board[x][y].value + " " + ANSI_RESET);
@@ -501,8 +507,8 @@ public class Board {
             System.err.println(" ");
         }
         else {
-            for (int y = 0; y < 4; y++) {
-                for (int x = 0; x < 4; x++) {
+            for (int x = 0; x < 4; x++) {
+                for (int y = 0; y < 4; y++) {
                     if (board[x][y].tileColor == TileColor.BLUE) {
                         //System.out.println(ANSI_RED + "This text is red!" + ANSI_RESET);
                         System.out.print(ANSI_BLUE + board[x][y].value + " " + ANSI_RESET);
@@ -547,7 +553,7 @@ public class Board {
     }
 
     public boolean isEmpty(int x, int y) {
-        if (board[y][x].tileColor == TileColor.EMPTY) {
+        if (board[x-1][y-1].tileColor == TileColor.EMPTY) {
             return true;
         }
 
