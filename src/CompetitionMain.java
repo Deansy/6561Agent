@@ -22,6 +22,7 @@ public class CompetitionMain {
 
     public static void main(String [] args) {
 
+
         CompetitionMain main = new CompetitionMain();
 
         main.gameLoop();

@@ -10,7 +10,7 @@ public class ExampleTest {
         mainBoard.placeTile(TileColor.BLUE, 3, 1, 1);
 
         mainBoard.printBoard(false);
-        mainBoard.slideDown();
+        mainBoard.slideBoard(Board.MOVE.DOWN);
 
         Board testBoard = new Board();
         testBoard.placeTile(TileColor.RED, 4,1, 1);

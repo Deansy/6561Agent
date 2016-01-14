@@ -61,39 +61,57 @@ public class DepthLimitedDFSAgent implements Player {
 
     @Override
     public void performPlaceTurn() {
-        // Place a random tile
-        Random rand = new Random();
-        int x = rand.nextInt(4);
-        int y = rand.nextInt(4);
+        System.err.println("Performing place turn, Move:" + currentMove);
 
-        // TODO: Fix the coordinate issue, make my grid implementation match the games
-        if (currentBoard.isEmpty(x, y)) {
+        double score = 0;
+
+        int depth = 4;
+        int sampleSize = 1;
+
+        Pair<Integer, Integer> moveToMake = new Pair<>(-1, -1);
+
+        // Could cause a slow down by calling getPlaces twice?
+         if (!currentBoard.getPlaces(CompetitionMain.getTileColorForMove(currentMove)).isEmpty()) {
+             for (Pair<Integer, Integer> coord : currentBoard.getPlaces(CompetitionMain.getTileColorForMove(currentMove))) {
+                 double resultCounter = 0;
+                 int x = coord.first;
+                 int y = coord.second;
+
+                 Board newBoard = new Board(currentBoard);
+                 newBoard.placeTile(CompetitionMain.getTileColorForMove(currentMove), x, y, 1);
+
+                 for (int i = 0; i < sampleSize; i++) {
+                     double result = DepthLimitedSearch(newBoard, depth);
+                     resultCounter += result;
+                 }
 
 
-            x++;
-            y++;
+                 double averageScore = resultCounter / sampleSize;
 
+                 if (averageScore >= score) {
+                     score = averageScore;
+                     moveToMake = new Pair<>(x, y);
+                 }
 
-            String move = x + "" + y;
-            if (!move.equals(previousMove)) {
-                currentBoard.placeTile(CompetitionMain.getTileColorForMove(currentMove), x, y, 1);
-                System.out.println(move);
-                System.err.println("Move " + currentMove + " - X:" + x + " Y:" + y);
-                currentMove++;
-            }
-            else {
-                System.err.println("Duplicate move, Retrying");
-                performPlaceTurn();
-            }
+             }
+         }
 
+        int x = moveToMake.first;
+        int y = moveToMake.second;
 
+        //TODO: Fix is empty
+        if (currentBoard.isEmpty(x-1, y-1)) {
+
+            currentBoard.placeTile(CompetitionMain.getTileColorForMove(currentMove), x, y, 1);
+            System.out.println("" + x + "" + y);
+            System.err.println("" + x + "" + y);
+            currentMove++;
 
             System.out.flush();
         }
         else {
-            // Couldn't place a move, Try again
-            System.err.println("Couldn't place a move, Try again");
-            performPlaceTurn();
+            System.err.println("Tile not empty, Trying again");
+            this.performPlaceTurn();
         }
     }
 
@@ -107,6 +125,7 @@ public class DepthLimitedDFSAgent implements Player {
         int depth = 4;
         int sampleSize = 1;
 
+        // Could cause a slow down by calling getSlides twice?
         if (!currentBoard.getSlides().isEmpty()) {
             for (Board.MOVE m : currentBoard.getSlides()) {
                 double resultCounter = 0;
@@ -178,8 +197,8 @@ public class DepthLimitedDFSAgent implements Player {
 
 
                 for (Pair<Integer, Integer> pair : places) {
-                    int x = pair.first + 1;
-                    int y = pair.second + 1;
+                    int x = pair.first;
+                    int y = pair.second;
 
                     Board newBoard = new Board(b);
 

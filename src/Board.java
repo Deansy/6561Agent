@@ -165,17 +165,19 @@ public class Board {
 
     // TODO: Think up a better parameter name
     // Returns all possible tiles for a placment
+
+    //TODO: My board deals in 0-3, The game wants 1-4, This is a problem
     public List<Pair<Integer, Integer>> getPlaces(TileColor colorToConsider) {
 
         // A list of grid coordinates for tile placement
         List<Pair<Integer, Integer>> places = new ArrayList<>();
 
 
-        for (int x = 0; x < boardHeight; x++) {
-            for (int y = 0; y < boardWidth; y++) {
+        for (int x = 1; x <= boardHeight; x++) {
+            for (int y = 1; y <= boardWidth; y++) {
                 // For each tile
 
-                if (isEmpty(x, y)) {
+                if (isEmpty(x-1, y-1)) {
                     // Add each possible location suitable for a tile here
                     places.add(new Pair<>(x, y));
                 }
@@ -468,7 +470,7 @@ public class Board {
                 }
             }
             else {
-                System.err.println("Invalid Y coordinate");
+                System.err.println("Invalid Y coordinate: " + yPos);
             }
         }
         else {

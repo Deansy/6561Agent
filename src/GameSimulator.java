@@ -29,16 +29,16 @@ public class GameSimulator {
                     String move = tokens[4];
 
                    if (move.equals("U")) {
-                       game.slideUp();
+                       game.slideBoard(Board.MOVE.UP);
 
                    } else if (move.equals("D")) {
-                       game.slideDown();
+                       game.slideBoard(Board.MOVE.DOWN);
 
                    } else if (move.equals("L")) {
-                       game.slideLeft();
+                       game.slideBoard(Board.MOVE.LEFT);
 
                    } else if (move.equals("R")) {
-                       game.slideRight();
+                       game.slideBoard(Board.MOVE.RIGHT);
                    }
                     else {
                        // Move
@@ -83,16 +83,16 @@ public class GameSimulator {
 
                 if (line.startsWith("move")) {
                     if (tokens[1].equals("U")) {
-                        game.slideUp();
+                        game.slideBoard(Board.MOVE.UP);
                     }
                     if (tokens[1].equals("D")) {
-                        game.slideDown();
+                        game.slideBoard(Board.MOVE.DOWN);
                     }
                     if (tokens[1].equals("L")) {
-                        game.slideLeft();
+                        game.slideBoard(Board.MOVE.LEFT);
                     }
                     if (tokens[1].equals("R")) {
-                        game.slideRight();
+                        game.slideBoard(Board.MOVE.RIGHT);
                     }
 
                 }
