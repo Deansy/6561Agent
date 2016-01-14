@@ -42,7 +42,8 @@ public class CompetitionMain {
 
         player = in.next();
 
-        currentPlayer = new RandomMoveAgent(currentBoard);
+        //currentPlayer = new RandomMoveAgent(currentBoard);
+        currentPlayer = new DepthLimitedDFSAgent(currentBoard);
 
 
 
@@ -67,7 +68,7 @@ public class CompetitionMain {
 
                 // The competition software wants us to exit.
                 if (input.equals("Quit")) {
-                    currentBoard.printBoard(true);
+                    //currentBoard.printBoard(true);
 
                     System.exit(0);
                 }

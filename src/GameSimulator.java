@@ -97,6 +97,20 @@ public class GameSimulator {
 
                 }
 
+                if (line.startsWith("x")) {
+                    game.placeTile(TileColor.BLUE, 1 , 2, 1);
+                }
+
+                if (line.startsWith("aiplace")) {
+                    Player p = new DepthLimitedDFSAgent(game);
+                    p.performPlaceTurn();
+                }
+
+                if (line.startsWith("slide")) {
+                    Player p = new DepthLimitedDFSAgent(game);
+                    p.performMoveTurn();
+                }
+
             }
         } catch (Exception e) {
             e.printStackTrace();

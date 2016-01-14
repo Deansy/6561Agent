@@ -1,6 +1,7 @@
-import com.sun.tools.javac.util.Pair;
+
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -12,6 +13,7 @@ public class Board {
     private Tile board[][];
     final int boardWidth = 4;
     final int boardHeight = 4;
+    public static List<Integer> placeTurns = Arrays.asList(1,2,3,6,7,8);
 
     // TODO: Relocate these?
     public static final String ANSI_RESET = "\u001B[0m";
@@ -54,11 +56,115 @@ public class Board {
     // Create a thread for each row and have each thread slide only one row
 
 
-    public void getSlides() {
-        // TODO: Implement
+    public enum MOVE {
+        LEFT, UP, RIGHT, DOWN;
+    }
+
+    // Returns a list of pairs which contain a slide direction and the resultant board state
+    public List<Pair<MOVE, Board>> getSlidesWithBoard() {
+        List<Pair<MOVE, Board>> validSlidesWithBoard = new ArrayList<>();
+        Board b;
+
+        // Left
+        b = new Board(this);
+        b.slideLeft();
+        if (!b.equals(this)) {
+            // The slide affected something
+            Pair<MOVE, Board> p = new Pair<>(MOVE.LEFT, b);
+            validSlidesWithBoard.add(p);
+
+        }
+
+        b = new Board(this);
+        b.slideRight();
+        if (!b.equals(this)) {
+            // The slide affected something
+            Pair<MOVE, Board> p = new Pair<>(MOVE.RIGHT, b);
+            validSlidesWithBoard.add(p);
+        }
+
+        b = new Board(this);
+        b.slideUp();
+        if (!b.equals(this)) {
+            // The slide affected something
+            Pair<MOVE, Board> p = new Pair<>(MOVE.UP, b);
+            validSlidesWithBoard.add(p);
+        }
+
+        b = new Board(this);
+        b.slideDown();
+        if (!b.equals(this)) {
+            // The slide affected something
+            Pair<MOVE, Board> p = new Pair<>(MOVE.DOWN, b);
+            validSlidesWithBoard.add(p);
+        }
+        return validSlidesWithBoard;
+    }
+
+    // Returns a list of directions which are possible from the current state
+    public List<MOVE> getSlides() {
+
+        List<MOVE> validSlides = new ArrayList<>();
+        Board b;
+
+        // Left
+        b = new Board(this);
+        b.slideLeft();
+
+        if (!b.equals(this)) {
+            // The slide affected something
+            validSlides.add(MOVE.LEFT);
+        }
+
+        b = new Board(this);
+        b.slideRight();
+        if (!b.equals(this)) {
+            // The slide affected something
+            validSlides.add(MOVE.RIGHT);
+        }
+
+        b = new Board(this);
+        b.slideUp();
+        if (!b.equals(this)) {
+            // The slide affected something
+            validSlides.add(MOVE.UP);
+        }
+
+        b = new Board(this);
+        b.slideDown();
+        if (!b.equals(this)) {
+            // The slide affected something
+            validSlides.add(MOVE.DOWN);
+        }
+
+        return validSlides;
+    }
+
+    // Returns the raw game board
+    public Tile[][] getBoard() {
+        return board;
+    }
+
+    // Slide the board in a given direction
+    public void slideBoard(MOVE m) {
+        switch (m) {
+            case LEFT:
+                this.slideLeft();
+                break;
+            case RIGHT:
+                this.slideRight();
+                break;
+            case UP:
+                this.slideUp();
+                break;
+            case DOWN:
+                this.slideDown();
+                break;
+        }
     }
 
     // TODO: Think up a better parameter name
+    // Returns all possible tiles for a placment
     public List<Pair<Integer, Integer>> getPlaces(TileColor colorToConsider) {
 
         // A list of grid coordinates for tile placement
@@ -196,7 +302,7 @@ public class Board {
         }
     }
 
-    public void slideLeft() {
+    private void slideLeft() {
 
         // Code must be run twice to ensure proper shifting and merging
         for (int i = 0; i < 2; i++) {
@@ -232,7 +338,7 @@ public class Board {
         }
     }
 
-    public void slideRight() {
+    private void slideRight() {
 
         // Code must be run twice to ensure all tiles are shifted and merged
         for (int i = 0; i < 2; i++) {
@@ -269,7 +375,7 @@ public class Board {
 
     }
 
-    public void slideUp() {
+    private void slideUp() {
 
         // Code must be run twice to ensure proper shifting and merging
         for (int i = 0; i < 2; i++) {
@@ -305,7 +411,7 @@ public class Board {
         }
     }
 
-    public void slideDown() {
+    private void slideDown() {
 
         for (int i = 0; i < 2; i++) {
             // Copy the board, Perform any operations and replace the board afterwards

@@ -19,8 +19,6 @@ public class RandomMoveAgent implements Player {
         previousMove = moveInfo;
 
         try {
-            //System.err.println("Handle Place: " + currentMove );
-            // I think this is sending the wrong values to my board, Hence the - 1
             int xPos = Integer.parseInt(moveInfo.substring(0,1));
             int yPos = Integer.parseInt(moveInfo.substring(1,2));
             currentBoard.placeTile(CompetitionMain.getTileColorForMove(currentMove),xPos,yPos, 1);
@@ -37,18 +35,17 @@ public class RandomMoveAgent implements Player {
     public void handleMoveTurn(String moveInfo) {
         previousMove = moveInfo;
 
-        //System.err.println("Handle Move: " + currentMove );
         if (moveInfo.equals("U")) {
-            currentBoard.slideUp();
+            currentBoard.slideBoard(Board.MOVE.UP);
         }
         else if (moveInfo.equals("D")) {
-            currentBoard.slideDown();
+            currentBoard.slideBoard(Board.MOVE.DOWN);
         }
         else if (moveInfo.equals("L")) {
-            currentBoard.slideLeft();
+            currentBoard.slideBoard(Board.MOVE.LEFT);
         }
         else if (moveInfo.equals("R")) {
-            currentBoard.slideRight();
+            currentBoard.slideBoard(Board.MOVE.RIGHT);
         }
 
 
@@ -136,16 +133,16 @@ public class RandomMoveAgent implements Player {
 
             switch (move) {
                 case "U" :
-                    currentBoard.slideUp();
+                    currentBoard.slideBoard(Board.MOVE.UP);
                     break;
                 case "D":
-                    currentBoard.slideDown();
+                    currentBoard.slideBoard(Board.MOVE.DOWN);
                     break;
                 case "L":
-                    currentBoard.slideLeft();
+                    currentBoard.slideBoard(Board.MOVE.LEFT);
                     break;
                 case "R":
-                    currentBoard.slideRight();
+                    currentBoard.slideBoard(Board.MOVE.RIGHT);
                     break;
             }
 
