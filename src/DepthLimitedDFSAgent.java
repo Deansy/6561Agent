@@ -1,5 +1,6 @@
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -156,23 +157,18 @@ public class DepthLimitedDFSAgent implements Player {
 
         switch (move) {
             case LEFT:
-                //currentBoard.slideLeft();
                 System.out.println("L");
                 break;
             case RIGHT:
-                //currentBoard.slideRight();
                 System.out.println("R");
                 break;
             case UP:
-                //currentBoard.slideUp();
                 System.out.println("U");
                 break;
             case DOWN:
-                //currentBoard.slideDown();
                 System.out.println("D");
                 break;
         }
-
 
         currentMove++;
         System.out.flush();
@@ -221,7 +217,19 @@ public class DepthLimitedDFSAgent implements Player {
     }
 
 
-    private int boardTotalHeuristic(Board b) {
+    private double boardTotalHeuristic(Board b) {
+
+        int boardScore = boardScore(b);
+
+        // We want to give a high priority to ensuring there is as many of the one tile as possible
+        double oneColor = oneColorMajority(b);
+
+
+        return (boardScore * 1.5)+ (oneColor * 20); //+ (maximisingBoard(b) * 1);//; //+ (largeCorners(b) * 40);// + (maximisingBoard(b) * 40);
+
+    }
+
+    private int boardScore(Board b) {
         int total = 0;
         for (int i = 0; i < b.boardWidth; i++) {
             for (int j = 0; j < b.boardHeight; j++) {
@@ -230,5 +238,206 @@ public class DepthLimitedDFSAgent implements Player {
         }
 
         return total;
+    }
+
+    // Encourage having the larger values in a corner
+    private double largeCorners (Board b) {
+        int score = 0;
+        int largest = 0;
+        int positionX = 0;
+        int positionY = 0;
+
+        for (int i = 0; i < 4; i+=3) {
+            for (int j = 0; j < 4; j+=3) {
+                if (b.getBoard()[i][j].tileColor != TileColor.EMPTY) {
+                    int current = b.getBoard()[i][j].value;
+
+                    if (current > largest) {
+                        largest = current;
+                        positionX = i;
+                        positionY = j;
+                    }
+                }
+            }
+        }
+
+        if (positionX == 0 && positionY == 0) {
+            score += 1;
+        }
+        else if (positionX == 3 && positionY == 0) {
+            score += 1;
+        }
+        else if (positionX == 0 && positionY == 3) {
+            score += 1;
+        }
+        else if (positionX == 3 && positionY == 3) {
+            score += 1;
+        }
+
+        return score;
+    }
+
+    // Checks the board for the the potential of slides that will increase the score
+
+    private double maximisingBoard(Board b) {
+        double runningScore = 0;
+        for (int x = 0; x < b.boardHeight; x++) {
+            for (int y = 0; y < b.boardWidth; y++) {
+                Tile currentTile = b.getBoard()[x][y];
+                List<Tile> adjacentTiles = new ArrayList<>();
+
+                // Theres probably a better way of doing this but I can't think of it.
+
+                if (x == 0 && y == 0) {
+                    Tile rightTile = b.getBoard()[x][y+1];
+                    Tile downTile = b.getBoard()[x+1][y];
+
+                    adjacentTiles.add(rightTile);
+                    adjacentTiles.add(downTile);
+                } else if (x == 0 && y == 3) {
+                    Tile leftTile = b.getBoard()[x][y-1];
+                    Tile downTile = b.getBoard()[x+1][y];
+
+                    adjacentTiles.add(leftTile);
+                    adjacentTiles.add(downTile);
+                }
+                else if (x == 3 && y == 0) {
+                    Tile rightTile = b.getBoard()[x][y+1];
+                    Tile upTile = b.getBoard()[x-1][y];
+
+                    adjacentTiles.add(rightTile);
+                    adjacentTiles.add(upTile);
+                }
+                else if (x == 3 && y == 3) {
+                    Tile leftTile = b.getBoard()[x][y-1];
+                    Tile upTile = b.getBoard()[x-1][y];
+
+                    adjacentTiles.add(leftTile);
+                    adjacentTiles.add(upTile);
+                }
+                else if (y == 0) {
+                    Tile rightTile = b.getBoard()[x][y+1];
+                    Tile upTile = b.getBoard()[x-1][y];
+                    Tile downTile = b.getBoard()[x+1][y];
+
+                    adjacentTiles.add(rightTile);
+                    adjacentTiles.add(upTile);
+                    adjacentTiles.add(downTile);
+                }
+                else if (y == 3) {
+                    Tile leftTile = b.getBoard()[x][y-1];
+                    Tile upTile = b.getBoard()[x-1][y];
+                    Tile downTile = b.getBoard()[x+1][y];
+
+                    adjacentTiles.add(leftTile);
+                    adjacentTiles.add(upTile);
+                    adjacentTiles.add(downTile);
+                }
+                else if (x == 0) {
+                    Tile rightTile = b.getBoard()[x][y+1];
+                    Tile leftTile = b.getBoard()[x][y-1];
+                    Tile downTile = b.getBoard()[x+1][y];
+
+                    adjacentTiles.add(rightTile);
+                    adjacentTiles.add(leftTile);
+                    adjacentTiles.add(downTile);
+                }
+                else if (x == 3) {
+                    Tile rightTile = b.getBoard()[x][y+1];
+                    Tile leftTile = b.getBoard()[x][y-1];
+                    Tile upTile = b.getBoard()[x-1][y];
+
+                    adjacentTiles.add(rightTile);
+                    adjacentTiles.add(leftTile);
+                    adjacentTiles.add(upTile);
+                }
+                else {
+                    Tile rightTile = b.getBoard()[x][y+1];
+                    Tile leftTile = b.getBoard()[x][y-1];
+                    Tile upTile = b.getBoard()[x-1][y];
+                    Tile downTile = b.getBoard()[x+1][y];
+
+                    adjacentTiles.add(rightTile);
+                    adjacentTiles.add(leftTile);
+                    adjacentTiles.add(upTile);
+                    adjacentTiles.add(downTile);
+                }
+
+
+                for (Tile tile : adjacentTiles) {
+                    if (tile.value == currentTile.value) {
+                        if (tile.tileColor == currentTile.tileColor) {
+                            // Merge
+                            runningScore += tile.value * 1;
+                        }
+                        else {
+                            // Same value, Different color, Deletion
+                            //runningScore -= tile.value;
+                        }
+                    }
+                }
+            }
+        }
+
+        return runningScore;
+    }
+
+
+
+    // Heuristic to reward a majority of one colors
+    private double oneColorMajority(Board b) {
+        int redTiles = 0;
+        int blueTiles = 0;
+        int greyTiles = 0;
+
+        for (int x = 0; x < b.boardHeight; x++) {
+            for (int y = 0; y < b.boardWidth; y++) {
+                Tile t = b.getBoard()[x][y];
+
+                if (t.tileColor == TileColor.RED) {
+                    redTiles++;
+                }
+                if (t.tileColor == TileColor.BLUE) {
+                    blueTiles++;
+                }
+                if (t.tileColor == TileColor.GREY) {
+                    greyTiles++;
+                }
+            }
+        }
+
+        int totalTiles = redTiles + blueTiles + greyTiles;
+        if (totalTiles > 0) {
+
+            int redBlue = Math.max(redTiles, blueTiles);
+            int blueGrey = Math.max(blueTiles, greyTiles);
+
+            int mixMax = Math.max(redBlue, blueGrey);
+
+            if (mixMax == redTiles) {
+                return redTiles / totalTiles;
+            } else if (mixMax == blueTiles) {
+                return blueTiles / totalTiles;
+            } else if (mixMax == greyTiles) {
+                return greyTiles / totalTiles;
+            }
+        }
+
+        return 0;
+    }
+
+    private int numEmptyTiles(Board b) {
+        int emptyTiles = 0;
+
+        for (int x = 0; x < b.boardHeight; x++) {
+            for (int y = 0; y < b.boardWidth; y++) {
+                Tile t = b.getBoard()[x][y];
+                if (t.tileColor == TileColor.EMPTY) {
+                    emptyTiles++;
+                }
+            }
+        }
+
+        return emptyTiles;
     }
 }
