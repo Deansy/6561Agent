@@ -456,15 +456,6 @@ public class Board {
             if (yPos <= boardHeight && yPos >= 1) {
 
 
-
-
-//                if (board[xPos-1][yPos-1].value != 0) {
-//                    System.err.println("Can only place tiles in empty slots, Printing board");
-//                    System.err.println("X:" + xPos + " Y:" + yPos );
-//
-//                    printBoard(true);
-//                }
-
                 if(board[xPos-1][yPos-1].tileColor != TileColor.EMPTY) {
                     System.err.println("Can only place tiles in empty slots, Printing board");
                     System.err.println("X:" + xPos + " Y:" + yPos );
@@ -550,6 +541,45 @@ public class Board {
 
 
         return true;
+    }
+
+    public boolean hasGameEnded() {
+        return (this.getPlaces(TileColor.EMPTY).size() <= 0 || this.getSlides().isEmpty());
+    }
+
+    public List<Board> getNextStates(int currentMove) {
+        List<Board> nextStates = new ArrayList<>();
+        if (placeTurns.contains(currentMove)) {
+            TileColor color = CompetitionMain.getTileColorForMove(currentMove + 1);
+            for (Pair<Integer, Integer> x : this.getPlaces(color) ) {
+                Board b = new Board(this);
+                b.placeTile(color, x.first, x.second, 1);
+
+                nextStates.add(b);
+            }
+        }
+        else {
+            for (MOVE x : this.getSlides()) {
+                Board b = new Board(this);
+                b.slideBoard(x);
+
+                nextStates.add(b);
+
+            }
+        }
+
+        return nextStates;
+    }
+
+    public int gameScore() {
+        int totalScore = 0;
+        for (int x = 0; x  <boardWidth; x++) {
+            for (int y = 0; y < boardHeight; y++) {
+                totalScore += this.getBoard()[x][y].value;
+            }
+        }
+
+        return totalScore;
     }
 
     public boolean isEmpty(int x, int y) {

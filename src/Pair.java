@@ -3,6 +3,9 @@
 
 import java.util.Objects;
 
+
+// FROM ANDROID
+
 public class Pair<F, S> {
     public final F first;
     public final S second;

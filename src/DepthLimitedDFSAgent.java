@@ -27,7 +27,8 @@ public class DepthLimitedDFSAgent implements Player {
             int xPos = Integer.parseInt(moveInfo.substring(0,1));
             int yPos = Integer.parseInt(moveInfo.substring(1,2));
             currentBoard.placeTile(CompetitionMain.getTileColorForMove(currentMove),xPos,yPos, 1);
-            System.err.println("Move " + currentMove + " - X:" + xPos + " Y:" + yPos);
+            //System.err.println("Move " + currentMove + " - X:" + xPos + " Y:" + yPos);
+            System.err.println(moveInfo);
             currentMove++;
         }
         // TODO: Better error handling
@@ -56,7 +57,8 @@ public class DepthLimitedDFSAgent implements Player {
         }
 
 
-        System.err.println("Move " + currentMove + " - " + moveInfo);
+        System.err.println(moveInfo);
+        //System.err.println("Move " + currentMove + " - " + moveInfo);
         currentMove++;
     }
 

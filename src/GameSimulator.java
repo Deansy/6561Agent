@@ -7,8 +7,8 @@ import java.io.InputStreamReader;
 public class GameSimulator {
 
     public static void main(String[] args) {
-        GameSimulator gp = new GameSimulator();
 
+        GameSimulator gp = new GameSimulator();
     }
 
     public GameSimulator() {
