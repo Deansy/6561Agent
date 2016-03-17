@@ -165,10 +165,8 @@ public class Board {
     }
 
     // TODO: Think up a better parameter name
-    // Returns all possible tiles for a placment
-
-    //TODO: My board deals in 0-3, The game wants 1-4, This is a problem
-    public List<Pair<Integer, Integer>> getPlaces(TileColor colorToConsider) {
+    // Returns all possible tiles for a placement
+    public List<Pair<Integer, Integer>> getPlaces(TileColor colorToConsider, int placesToGet) {
 
         // A list of grid coordinates for tile placement
         List<Pair<Integer, Integer>> places = new ArrayList<>();
@@ -183,6 +181,10 @@ public class Board {
                     places.add(new Pair<>(x, y));
                 }
             }
+        }
+
+        if (placesToGet > 0) {
+            return places.subList(0, placesToGet);
         }
 
         return places;
@@ -322,9 +324,6 @@ public class Board {
                             if (boardCopy[k][y].value != 0) {
                                 boardCopy[x][y] = boardCopy[k][y];
 
-                                boardCopy[x][y].xPos = x;
-                                boardCopy[x][y].yPos = y;
-
                                 boardCopy[k][y] = new Tile(TileColor.EMPTY, k, y, 0);
                                 break;
                             }
@@ -358,8 +357,6 @@ public class Board {
                             if (boardCopy[k][y].value != 0) {
                                 boardCopy[x][y] = boardCopy[k][y];
 
-                                boardCopy[x][y].xPos = x;
-                                boardCopy[x][y].yPos = y;
 
                                 boardCopy[k][y] = new Tile(TileColor.EMPTY, k, y, 0);
                                 break;
@@ -394,9 +391,6 @@ public class Board {
                             if (boardCopy[x][k].value != 0) {
                                 boardCopy[x][y] = boardCopy[x][k];
 
-                                boardCopy[x][y].xPos = x;
-                                boardCopy[x][y].yPos = y;
-
                                 boardCopy[x][k] = new Tile(TileColor.EMPTY, x, k, 0);
                                 break;
                             }
@@ -428,9 +422,6 @@ public class Board {
                         for (int k = y - 1; k >= 0; k--) {
                             if (boardCopy[x][k].value != 0) {
                                 boardCopy[x][y] = boardCopy[x][k];
-
-                                boardCopy[x][y].xPos = x;
-                                boardCopy[x][y].yPos = y;
 
                                 boardCopy[x][k] = new Tile(TileColor.EMPTY, x, k, 0);
                                 break;
@@ -544,14 +535,15 @@ public class Board {
     }
 
     public boolean hasGameEnded() {
-        return (this.getPlaces(TileColor.EMPTY).size() <= 0 || this.getSlides().isEmpty());
+        return (this.getPlaces(TileColor.EMPTY, 0).size() <= 0 || this.getSlides().isEmpty());
     }
 
     public List<Board> getNextStates(int currentMove) {
         List<Board> nextStates = new ArrayList<>();
-        if (placeTurns.contains(currentMove)) {
+
+        if (placeTurns.contains(currentMove + 1)) {
             TileColor color = CompetitionMain.getTileColorForMove(currentMove + 1);
-            for (Pair<Integer, Integer> x : this.getPlaces(color) ) {
+            for (Pair<Integer, Integer> x : this.getPlaces(color, 0) ) {
                 Board b = new Board(this);
                 b.placeTile(color, x.first, x.second, 1);
 
@@ -563,7 +555,10 @@ public class Board {
                 Board b = new Board(this);
                 b.slideBoard(x);
 
-                nextStates.add(b);
+                if (b.gameScore() != 0) {
+                    nextStates.add(b);
+                }
+
 
             }
         }

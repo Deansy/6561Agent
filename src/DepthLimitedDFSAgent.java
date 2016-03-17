@@ -73,9 +73,12 @@ public class DepthLimitedDFSAgent implements Player {
 
         Pair<Integer, Integer> moveToMake = new Pair<>(-1, -1);
 
+
+        int placesToGet = 5;
+
         // Could cause a slow down by calling getPlaces twice?
-         if (!currentBoard.getPlaces(CompetitionMain.getTileColorForMove(currentMove)).isEmpty()) {
-             for (Pair<Integer, Integer> coord : currentBoard.getPlaces(CompetitionMain.getTileColorForMove(currentMove))) {
+         if (!currentBoard.getPlaces(CompetitionMain.getTileColorForMove(currentMove), placesToGet).isEmpty()) {
+             for (Pair<Integer, Integer> coord : currentBoard.getPlaces(CompetitionMain.getTileColorForMove(currentMove), placesToGet)) {
                  double resultCounter = 0;
                  int x = coord.first;
                  int y = coord.second;
@@ -179,16 +182,19 @@ public class DepthLimitedDFSAgent implements Player {
     private double DepthLimitedSearch(Board b, int depth) {
         double score = 0.0;
 
+        int placesToGet = 5;
+        int hardCodedDepth = 4;
+
 
         if (depth == 0) {
             score = boardTotalHeuristic(b);
         }
         else {
-            if (Board.placeTurns.contains((currentMove + depth) % 10)) {
+            if (Board.placeTurns.contains((currentMove + ((hardCodedDepth + 1) - 1)) % 10)) {
                 // Place Turn
-                TileColor color = CompetitionMain.getTileColorForMove((currentMove + depth) % 10);
+                TileColor color = CompetitionMain.getTileColorForMove((currentMove + ((hardCodedDepth + 1) - 1)) % 10);
                 // Color currently does nothing
-                List<Pair<Integer, Integer>> places = b.getPlaces(color);
+                List<Pair<Integer, Integer>> places = b.getPlaces(color, placesToGet);
 
 
                 for (Pair<Integer, Integer> pair : places) {

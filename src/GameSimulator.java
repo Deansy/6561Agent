@@ -22,9 +22,21 @@ public class GameSimulator {
             String line;
 
             while ((line = stdin.readLine()) != null && line.length() != 0) {
+
+
                 String[] tokens = line.split(" ");
 
-                if (line.startsWith("Round")) {
+                if (line.startsWith("help")) {
+                    System.out.println("print - prints current board");
+                    System.out.println("exit - exits the current game");
+                    System.out.println("place - x y color(R,B,G) value - e.g. 1 1 R 3");
+                    System.out.println("move - direction(U,D,L,R)");
+                    System.out.println("aiplace - AI will perform a place move on the board");
+                    System.out.println("aislide - AI will perfrom a slide move on the board");
+                }
+
+                // For pasting in from logs?
+                if (line.startsWith("round")) {
                     // Get round
                     int moveNumber = Integer.parseInt(tokens[1]);
                     String move = tokens[4];
@@ -98,18 +110,35 @@ public class GameSimulator {
 
                 }
 
-                if (line.startsWith("x")) {
-                    game.placeTile(TileColor.BLUE, 1 , 2, 1);
-                }
 
                 if (line.startsWith("aiplace")) {
 
+                    ElapsedTimer t = new ElapsedTimer();
                     p.performPlaceTurn();
+                    System.out.println(t);
                 }
 
-                if (line.startsWith("slide")) {
+                if (line.startsWith("aislide")) {
+                    p.performMoveTurn();
+                }
+
+                if(line.startsWith("aiplay")) {
+                    ElapsedTimer t = new ElapsedTimer();
+                    p.performPlaceTurn();
+                    p.performPlaceTurn();
+                    p.performPlaceTurn();
 
                     p.performMoveTurn();
+                    p.performMoveTurn();
+
+                    p.performPlaceTurn();
+                    p.performPlaceTurn();
+                    p.performPlaceTurn();
+
+
+                    p.performMoveTurn();
+                    p.performMoveTurn();
+                    System.out.println(t);
                 }
 
             }
