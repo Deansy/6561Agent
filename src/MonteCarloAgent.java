@@ -10,9 +10,19 @@ public class MonteCarloAgent implements Player {
     Board currentBoard;
     String previousMove;
 
+    MCTSNode currentNode;
+
     public MonteCarloAgent(Board board) {
         currentMove = 1;
         currentBoard = board;
+
+        currentNode = new MCTSNode();
+
+
+        int n = 200;
+        for (int i=0; i<n; i++) {
+            currentNode.selectAction();
+        }
     }
 
     @Override
@@ -59,95 +69,96 @@ public class MonteCarloAgent implements Player {
     @Override
     public void performPlaceTurn() {
 
+        if (currentMove % 50 == 0) {
+            System.err.println("200 Expand");
+            for (int i = 0; i < 200; i++) {
+                currentNode.selectAction();
+            }
+        }
+
+        if (currentNode.children.size() == 0) {
+           currentNode.expand();
+        }
+
+        double highestTotalValue = 0;
+        try {
+            highestTotalValue = currentNode.children.get(0).totValue;
+
+        }
+        catch (Exception e) {
+            System.err.println("No Possible Move");
+            currentBoard.printBoard(true);
+            e.printStackTrace();
+        }
+        MCTSNode bestChildNode = currentNode.children.get(0);
+        for (MCTSNode n : currentNode.children) {
+            if (n.totValue > highestTotalValue) {
+                bestChildNode = n;
+            }
+        }
+
+        Board.NewStateData nsd = bestChildNode.stateData;
+
+        currentNode = bestChildNode;
+
+        currentBoard.placeTile(nsd.color, nsd.x, nsd.y, 1);
+        System.out.println("" + nsd.x + "" + nsd.y);
+        System.err.println("" + nsd.x + "" + nsd.y);
+        currentMove++;
+
+        System.out.flush();
+
+
+
     }
 
     @Override
     public void performMoveTurn() {
 
+        if (currentMove % 50 == 0) {
+            System.err.println("200 Expand");
+            for (int i = 0; i < 200; i++) {
+                currentNode.selectAction();
+            }
+        }
+
+        if (currentNode.children.size() == 0) {
+            currentNode.expand();
+        }
+
+        double highestTotalValue = currentNode.children.get(0).totValue;
+        MCTSNode bestChildNode = currentNode.children.get(0);
+        for (MCTSNode n : currentNode.children) {
+            if (n.totValue > highestTotalValue) {
+                bestChildNode = n;
+            }
+        }
+
+        Board.NewStateData nsd = bestChildNode.stateData;
+
+        currentBoard.slideBoard(nsd.move);
+
+        currentNode = bestChildNode;
+
+        System.err.println(nsd.move);
+
+        switch (nsd.move) {
+            case LEFT:
+                System.out.println("L");
+                break;
+            case RIGHT:
+                System.out.println("R");
+                break;
+            case UP:
+                System.out.println("U");
+                break;
+            case DOWN:
+                System.out.println("D");
+                break;
+        }
+
+        currentMove++;
+        System.out.flush();
     }
 
-
-    private class MonteCarloTreeSearch {
-
-
-    }
-
-
-    private class MCTSNode {
-        Board board;
-        int currentMove;
-
-
-
-        double nVisits, totValue;
-        double epsilon = 1e-6;
-        List<MCTSNode> children = new LinkedList<>();
-
-
-
-        public void selectAction(MCTSNode root) {
-            List<MCTSNode> visited = new LinkedList<>();
-
-            MCTSNode cur = this;
-
-            visited.add(this);
-
-            while(!this.board.hasGameEnded()) {
-                cur = select();
-                visited.add(cur);
-            }
-
-            cur.expand();
-            MCTSNode newNode = cur.select();
-            visited.add(newNode);
-
-            double value = rollOut(newNode);
-
-            for (MCTSNode node : visited) {
-                node.updateStats(value);
-            }
-
-
-        }
-
-        public void expand() {
-
-            List<Board> board = this.board.getNextStates(currentMove);
-
-            for (Board b : board) {
-                MCTSNode newNode = new MCTSNode();
-                newNode.board = b;
-                newNode.currentMove = currentMove + 1;
-            }
-
-        }
-
-        public MCTSNode select() {
-            MCTSNode selected = null;
-
-            double bestValue = Double.MIN_VALUE;
-
-            for (MCTSNode n : children) {
-                double uctValue = n.totValue / (n.nVisits + n.epsilon) +
-                        Math.sqrt(Math.log(nVisits + 1) / (n.nVisits + epsilon));
-
-                if (uctValue > bestValue) {
-                    selected = n;
-                    bestValue = uctValue;
-                }
-            }
-
-            return selected;
-
-        }
-
-        public double rollOut (MCTSNode n) {
-            return n.board.gameScore();
-        }
-
-        public void updateStats(double value) {
-            nVisits++;
-            totValue += value;
-        }
-    }
 }

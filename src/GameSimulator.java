@@ -14,7 +14,8 @@ public class GameSimulator {
     public GameSimulator() {
 
         Board game = new Board();
-        Player p = new DepthLimitedDFSAgent(game);
+        //Player p = new DepthLimitedDFSAgent(game);
+        Player p = new MonteCarloAgent(game);
 
         try {
 

@@ -2,6 +2,7 @@
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -536,6 +537,57 @@ public class Board {
 
     public boolean hasGameEnded() {
         return (this.getPlaces(TileColor.EMPTY, 0).size() <= 0 || this.getSlides().isEmpty());
+    }
+
+    // Details the move to get here from the previous state
+    public class NewStateData {
+        int x = -1;
+        int y = -1;
+        Board.MOVE move = null;
+        TileColor color;
+
+        NewStateData(Board.MOVE move) {
+            this.move = move;
+        }
+        NewStateData(int x, int y, TileColor color) {
+            this.x = x;
+            this.y = y;
+            this.color = color;
+        }
+    }
+
+    public List<Pair<Board, NewStateData>> getNextStatesWithStateData(int currentMove) {
+        List<Pair<Board, NewStateData>> nextStates = new LinkedList<>();
+
+        if (placeTurns.contains((currentMove + 1) % 10)) {
+            TileColor color = CompetitionMain.getTileColorForMove((currentMove + 1) % 10);
+            for (Pair<Integer, Integer> x : this.getPlaces(color, 0) ) {
+                Board b = new Board(this);
+                b.placeTile(color, x.first, x.second, 1);
+
+                NewStateData nsd = new NewStateData(x.first, x.second, color);
+
+                Pair<Board, NewStateData> pair = new Pair<>(b, nsd);
+                nextStates.add(pair);
+            }
+        }
+        else {
+            for (MOVE x : this.getSlides()) {
+                Board b = new Board(this);
+                b.slideBoard(x);
+
+                if (b.gameScore() != 0) {
+                    NewStateData nsd = new NewStateData(x);
+
+                    Pair<Board, NewStateData> pair = new Pair<>(b, nsd);
+                    nextStates.add(pair);
+                }
+
+
+            }
+        }
+
+        return nextStates;
     }
 
     public List<Board> getNextStates(int currentMove) {

@@ -14,6 +14,11 @@ public class RandomMoveAgent implements Player {
         currentBoard = board;
     }
 
+    public RandomMoveAgent(Board board, int currentMove) {
+        this.currentMove = currentMove;
+        currentBoard = board;
+    }
+
     @Override
     public void handlePlaceTurn(String moveInfo) {
         previousMove = moveInfo;
@@ -49,7 +54,7 @@ public class RandomMoveAgent implements Player {
         }
 
 
-        System.err.println("Move " + currentMove + " - " + moveInfo);
+        //System.err.println("Move " + currentMove + " - " + moveInfo);
         currentMove++;
     }
 
@@ -57,26 +62,26 @@ public class RandomMoveAgent implements Player {
     public void performPlaceTurn() {
         // Place a random tile
         Random rand = new Random();
-        int x = rand.nextInt(4);
-        int y = rand.nextInt(4);
+        int x = rand.nextInt(4) + 1;
+        int y = rand.nextInt(4) + 1;
 
         // TODO: Fix the coordiante issue, make my grid implementation match the games
         if (currentBoard.isEmpty(x, y)) {
 
 
-            x++;
-            y++;
+            //x++;
+            //y++;
 
 
             String move = x + "" + y;
             if (!move.equals(previousMove)) {
                 currentBoard.placeTile(CompetitionMain.getTileColorForMove(currentMove), x, y, 1);
-                System.out.println(move);
-                System.err.println("Move " + currentMove + " - X:" + x + " Y:" + y);
+               // System.out.println(move);
+                //System.err.println("Move " + currentMove + " - X:" + x + " Y:" + y);
                 currentMove++;
             }
             else {
-                System.err.println("Duplicate move, Retrying");
+                //System.err.println("Duplicate move, Retrying");
                 performPlaceTurn();
             }
 
@@ -86,8 +91,8 @@ public class RandomMoveAgent implements Player {
         }
         else {
             // Couldn't place a move, Try again
-            System.err.println("Couldn't place a move, Try again");
-            performPlaceTurn();
+            //System.err.println("Couldn't place a move, Try again:" + x + "" + y);
+            //performPlaceTurn();
             //System.exit(0);
         }
     }
@@ -123,11 +128,11 @@ public class RandomMoveAgent implements Player {
         }
 
 
-        if (previousMove.equals(move)) {
-            System.err.println("Duplicate move, Retrying");
-            performMoveTurn();
-        }
-        else {
+        //if (previousMove.equals(move)) {
+        //    System.err.println("Duplicate move, Retrying");
+        //    performMoveTurn();
+        //}
+       // else {
             Board beforeMove = new Board(currentBoard);
 
 
@@ -146,17 +151,17 @@ public class RandomMoveAgent implements Player {
                     break;
             }
 
-            if (currentBoard.equals(beforeMove)) {
-                System.err.println("Move had no effect");
-                performMoveTurn();
-            }
-            else {
-                System.out.println(move);
-                System.err.println("Move " + currentMove + " - " + move);
+            //if (currentBoard.equals(beforeMove)) {
+            //    System.err.println("Move had no effect");
+          //      performMoveTurn();
+            //}
+           // else {
+                //System.out.println(move);
+                //System.err.println("Move " + currentMove + " - " + move);
                 currentMove++;
-            }
+           // }
 
-        }
+       // }
 
         System.out.flush();
     }
